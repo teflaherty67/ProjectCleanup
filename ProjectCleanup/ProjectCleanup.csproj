@@ -58,7 +58,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Classes\ButtonDataClass.cs" />
-    <Compile Include="ProjectCleanup.cs" />
+    <Compile Include="cmdProjectCleanup.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

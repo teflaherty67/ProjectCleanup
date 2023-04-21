@@ -5,15 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ProjectCleanup"
              mc:Ignorable="d" 
-             d:DesignHeight="280" d:DesignWidth="250" Title="Project Cleanup">
+             d:DesignHeight="375" d:DesignWidth="320" Title="Project Cleanup" MinWidth="300" MinHeight="350">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>            
-            <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="35"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -23,12 +24,14 @@
         <ComboBox x:Name="cmbClient" Grid.Column="1" Height="25"/>
         <Label Content="# of Floors:" Grid.Row="1"/>
         <ComboBox x:Name="cmbFloors" Grid.Row="1" Grid.Column="1" Height="25"/>
-        <Label Content="Project Code:" Grid.Row="2"/>
-        <CheckBox x:Name="chbCode" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
-        <Label Content="Elevation Groups:" Grid.Row="3"/>
-        <ListBox ItemsSource="{Binding Items}" Grid.Row="4" Grid.ColumnSpan="2">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
+        <Label Content="Delete unused area schedules:" Grid.Row="2"/>
+        <CheckBox x:Name="chbSchedules" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
+        <Label Content="Project Code:" Grid.Row="3"/>
+        <CheckBox x:Name="chbCode" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"/>
+        <Label Content="Elevation Groups:" Grid.Row="4"/>
+            <ListBox ItemsSource="{Binding Items}" Grid.Row="5" Grid.ColumnSpan="2" Padding="0,0,0,10">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Name}" Margin="0,0,5,0"/>
                         <CheckBox IsChecked="{Binding IsSelected}"/>
@@ -36,9 +39,9 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button x:Name="btnOK" Width="90" Height="25" Margin="0,0,5,0" Content="OK"/>
-            <Button x:Name="btnCancel" Width="90" Margin="5,0,0,0" Content="Cancel" Height="25"/>
+        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="btnOK" Width="90" Height="25" Margin="0,0,5,0" Content="OK" Click="btnOK_Click"/>
+            <Button x:Name="btnCancel" Width="90" Margin="5,0,0,0" Content="Cancel" Height="25" Click="btnCancel_Click"/>
         </StackPanel>        
     </Grid>
 </Window>

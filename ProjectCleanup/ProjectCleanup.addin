@@ -4,7 +4,7 @@
     <Text>Command ProjectCleanup</Text>
     <Description>Some description for ProjectCleanup</Description>
     <Assembly>ProjectCleanup.dll</Assembly>
-    <FullClassName>ProjectCleanup.Command</FullClassName>
+    <FullClassName>ProjectCleanup.cmdProjectCleanup</FullClassName>
     <ClientId>3a45dbcf-73d7-4054-8db5-2a6501de4127</ClientId>
     <VendorId>com.YOUR COMPANY NAME</VendorId>
     <VendorDescription>YOUR COMPANY NAME, YOUR COMPANY URL</VendorDescription>

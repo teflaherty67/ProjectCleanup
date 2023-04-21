@@ -14,7 +14,7 @@ using System.Reflection;
 namespace ProjectCleanup
 {
     [Transaction(TransactionMode.Manual)]
-    public class ProjectCleanup : IExternalCommand
+    public class cmdProjectCleanup : IExternalCommand
     {
         public Result Execute(
           ExternalCommandData commandData,
