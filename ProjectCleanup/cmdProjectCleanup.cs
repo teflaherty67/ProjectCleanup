@@ -41,6 +41,41 @@ namespace ProjectCleanup
 
             // get form data and do something
 
+            string txtClient = curForm.GetComboxClient();
+            string floorNum = curForm.GetComboxFloors();
+
+            string nameClient = "";
+
+            if (txtClient == "Central Texas")
+                nameClient = "LGI-CTX";
+            else if (txtClient == "Dallas/Fort Worth")
+                nameClient = "LGI-DFW";
+            else if (txtClient == "Houston")
+                nameClient = "LGI-HOU";
+            else if (txtClient == "Maryland")
+                nameClient = "LGI-MD";
+            else if (txtClient == "Minnesota")
+                nameClient = "LGI-MN";
+            else if (txtClient == "Oklahoma")
+                nameClient = "LGI-OK";
+            else if (txtClient == "Pennsylvania")
+                nameClient = "LGI-PA";
+            else if (txtClient == "Southeast")
+                nameClient = "LGI-SE";
+            else if (txtClient == "Virginia")
+                nameClient = "LGI-VA";
+            else if (txtClient == "West Virginia")
+                nameClient = "LGI-WV";
+
+            ProjectInfo clientInfo = doc.ProjectInformation;
+
+            using (Transaction t = new Transaction(doc))
+            {
+                t.Start("Project Cleanup");
+
+                clientInfo.ClientName = nameClient;
+            }                
+
             return Result.Succeeded;
         }
 

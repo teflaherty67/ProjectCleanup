@@ -35,6 +35,15 @@ namespace ProjectCleanup
             }
 
             cmbClient.SelectedIndex = 0;
+
+            List<string> listFloors = new List<string> { "1", "2", "3" };
+
+            foreach (string floor in listFloors)
+            {
+                cmbFloors.Items.Add(floor);
+            }
+
+            cmbFloors.SelectedIndex = 0;
         }
 
         internal string GetComboxClient()
