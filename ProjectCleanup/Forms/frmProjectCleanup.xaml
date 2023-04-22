@@ -24,21 +24,27 @@
         <ComboBox x:Name="cmbClient" Grid.Column="1" Height="25"/>
         <Label Content="# of Floors:" Grid.Row="1"/>
         <ComboBox x:Name="cmbFloors" Grid.Row="1" Grid.Column="1" Height="25"/>
-        <Label Content="Delete unused area schedules:" Grid.Row="2"/>
-        <CheckBox x:Name="chbSchedules" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
-        <Label Content="Project Code:" Grid.Row="3"/>
-        <CheckBox x:Name="chbCode" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"/>
-        <Label Content="Elevation Groups:" Grid.Row="4"/>
-            <ListBox ItemsSource="{Binding Items}" Grid.Row="5" Grid.ColumnSpan="2" Padding="0,0,0,10">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name}" Margin="0,0,5,0"/>
-                        <CheckBox IsChecked="{Binding IsSelected}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <Label Content="Delete unused views:" Grid.Row="2"/>
+        <CheckBox x:Name="chbViews" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
+        <Label Content="Delete unused schedules:" Grid.Row="3"/>
+        <CheckBox x:Name="chbSchedules" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"/>
+        <Label Content="Project code:" Grid.Row="4"/>
+        <CheckBox x:Name="chbCode" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center"/>
+        <DataGrid x:Name="grpData" Grid.Row="5"
+                  GridLinesVisibility="All"
+                  AlternatingRowBackground="AliceBlue"
+                  CanUserAddRows="False"
+                  CanUserReorderColumns="False"
+                  SelectionMode="Extended"
+                  AutoGenerateColumns="False"
+                  EnableRowVirtualization="False"
+                  EnableColumnVirtualization="False" Grid.ColumnSpan="2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Sheet Group Name" Width="*"/>
+                <DataGridCheckBoxColumn Header="Clean Group" Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
         <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="btnOK" Width="90" Height="25" Margin="0,0,5,0" Content="OK" Click="btnOK_Click"/>
             <Button x:Name="btnCancel" Width="90" Margin="5,0,0,0" Content="Cancel" Height="25" Click="btnCancel_Click"/>

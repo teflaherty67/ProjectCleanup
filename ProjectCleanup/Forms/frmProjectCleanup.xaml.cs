@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,9 +22,14 @@ namespace ProjectCleanup
     /// </summary>
     public partial class frmProjectCleanup : Window
     {
+        ObservableCollection<DataClass1> dataList { get; set; }
+        ObservableCollection<string> dataItems { get; set; }
+
         public frmProjectCleanup()
         {
             InitializeComponent();
+
+            dataList = new ObservableCollection<DataClass1>();
 
             List<string> listClients = new List<string> { "Central Texas", "Dallas/Ft Worth",
                 "Florida", "Houston", "Maryland", "Minnesota", "Oklahoma", "Pennsylvania",
@@ -54,6 +60,16 @@ namespace ProjectCleanup
         internal string GetComboxFloors()
         {
             return cmbFloors.SelectedItem.ToString();
+        }
+
+        internal bool GetCheckBoxViews()
+        {
+            if (chbViews.IsChecked == true)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         internal bool GetCheckBoxSchedules()
@@ -87,5 +103,11 @@ namespace ProjectCleanup
             this.DialogResult= false;
             this.Close();
         }
+    }
+
+    public class DataClass1
+    {
+        public string Item1 { get; set; }
+        public bool Item2 { get; set; }
     }
 }

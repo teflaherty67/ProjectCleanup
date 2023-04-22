@@ -73,8 +73,13 @@ namespace ProjectCleanup
             {
                 t.Start("Project Cleanup");
 
-                clientInfo.ClientName = nameClient;
-            }                
+                if (null != clientInfo)
+                {
+                    clientInfo.ClientName = nameClient;
+                } 
+                
+                t.Commit();
+            }            
 
             return Result.Succeeded;
         }
