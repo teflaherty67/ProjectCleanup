@@ -52,12 +52,12 @@ namespace ProjectCleanup
             cmbFloors.SelectedIndex = 0;
         }
 
-        internal string GetComboxClient()
+        internal string GetComboboxClient()
         {
-            return cmbClient.SelectedItem.ToString();
+            return cmbClient.Text.ToString();
         }
 
-        internal string GetComboxFloors()
+        internal string GetComboboxFloors()
         {
             return cmbFloors.SelectedItem.ToString();
         }
