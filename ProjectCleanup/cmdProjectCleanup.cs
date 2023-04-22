@@ -30,8 +30,6 @@ namespace ProjectCleanup
 
             // put any code needed for the form here
 
-            List<string> grpName = GetAllSheetGroups(doc);
-
             // open form
             frmProjectCleanup curForm = new frmProjectCleanup()
             {
@@ -80,58 +78,74 @@ namespace ProjectCleanup
                 if (null != clientInfo)
                 {
                     clientInfo.ClientName = nameClient;
-                } 
-                
+                }
+
+                string areaString = "";
+                string roofString = "";
+
+                if (floorNum == "1")
+                {
+                    areaString = "(multi-level)";
+                    roofString = "(multi-space)";
+                }
+                else if (floorNum != "1")
+                {
+                    areaString = "(single-level)";
+                    roofString = "(single-space)";
+                }
+
+                List<ViewSchedule> scheduleList = GetScheduleByNameContains(doc, areaString);                
+
+                List<ViewSchedule> roofList = GetScheduleByNameContains(doc, roofString);
+
+                if (curForm.GetCheckBoxSchedules() == true)
+                {
+                    foreach (ViewSchedule curSchedule in scheduleList)
+                    {
+                        doc.Delete(curSchedule.Id);
+                    }                    
+                }
+
+
+
                 t.Commit();
             }            
 
             return Result.Succeeded;
         }
 
-        private List<string> GetAllSheetGroups(Document doc)
+        private List<ViewSchedule> GetScheduleByNameContains(Document doc, string scheduleString)
         {
-            List<ViewSheet> sheetList = GetAllSheets(doc);
+            List<ViewSchedule> m_scheduleList = GetAllSchedules(doc);
 
-            List<string> m_returnList = new List<string>();
+            List<ViewSchedule> m_returnList = new List<ViewSchedule>();
 
-            foreach (ViewSheet curSheet in sheetList)
+            foreach (ViewSchedule curSchedule in m_scheduleList)
             {
-                Parameter grpName = GetParameterByName(curSheet, "Group");
-
-                if (m_returnList.Contains(grpName.ToString()))
-                    continue;
-                else m_returnList.Add(grpName.ToString());
-
-                m_returnList.Add(grpName.ToString());
-            }            
+                if (curSchedule.Name.Contains(scheduleString))
+                    m_returnList.Add(curSchedule);
+            }
 
             return m_returnList;
         }
 
-        public static Parameter GetParameterByName(ViewSheet curSheet, string paramName)
+        public static List<ViewSchedule> GetAllSchedules(Document doc)
         {
-            foreach (Parameter curParam in curSheet.Parameters)
+            List<ViewSchedule> m_schedList = new List<ViewSchedule>();
+
+            FilteredElementCollector curCollector = new FilteredElementCollector(doc);
+            curCollector.OfClass(typeof(ViewSchedule));
+
+            //loop through views and check if schedule - if so then put into schedule list
+            foreach (ViewSchedule curView in curCollector)
             {
-                if (curParam.Definition.Name.ToString() == paramName)
-                    return curParam;
+                if (curView.ViewType == ViewType.Schedule)
+                {
+                    m_schedList.Add((ViewSchedule)curView);
+                }
             }
 
-            return null;
-        }
-
-        private List<ViewSheet> GetAllSheets(Document doc)
-        {
-            //get all sheets
-            FilteredElementCollector m_colViews = new FilteredElementCollector(doc);
-            m_colViews.OfCategory(BuiltInCategory.OST_Sheets);
-
-            List<ViewSheet> m_sheets = new List<ViewSheet>();
-            foreach (ViewSheet x in m_colViews.ToElements())
-            {
-                m_sheets.Add(x);
-            }
-
-            return m_sheets;
+            return m_schedList;
         }
 
         public static String GetMethod()

@@ -22,14 +22,10 @@ namespace ProjectCleanup
     /// </summary>
     public partial class frmProjectCleanup : Window
     {
-        ObservableCollection<DataClass1> dataList { get; set; }
-        ObservableCollection<string> dataItems { get; set; }
 
         public frmProjectCleanup()
         {
             InitializeComponent();
-
-            dataList = new ObservableCollection<DataClass1>();
 
             List<string> listClients = new List<string> { "Central Texas", "Dallas/Ft Worth",
                 "Florida", "Houston", "Maryland", "Minnesota", "Oklahoma", "Pennsylvania",
@@ -92,6 +88,16 @@ namespace ProjectCleanup
             return false;
         }
 
+        internal bool GetCheckBoxGroups()
+        {
+            if (chbGroups.IsChecked == true)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
@@ -103,11 +109,5 @@ namespace ProjectCleanup
             this.DialogResult= false;
             this.Close();
         }
-    }
-
-    public class DataClass1
-    {
-        public string Item1 { get; set; }
-        public bool Item2 { get; set; }
     }
 }

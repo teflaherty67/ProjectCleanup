@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ProjectCleanup"
              mc:Ignorable="d" 
-             d:DesignHeight="375" d:DesignWidth="320" Title="Project Cleanup" MinWidth="300" MinHeight="350">
+             d:DesignWidth="320" d:DesignHeight="280"  Title="Project Cleanup" MinWidth="300" MinHeight="250">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -13,8 +13,9 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="35"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -30,22 +31,9 @@
         <CheckBox x:Name="chbSchedules" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"/>
         <Label Content="Project code:" Grid.Row="4"/>
         <CheckBox x:Name="chbCode" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center"/>
-        <DataGrid x:Name="grpData" Grid.Row="5"
-                  GridLinesVisibility="All"
-                  AlternatingRowBackground="AliceBlue"
-                  CanUserAddRows="False"
-                  CanUserReorderColumns="False"
-                  SelectionMode="Extended"
-                  AutoGenerateColumns="False"
-                  EnableRowVirtualization="False"
-                  EnableColumnVirtualization="False" Grid.ColumnSpan="2">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Sheet Group Name" Width="*"/>
-                <DataGridCheckBoxColumn Header="Clean Group" Width="100"/>
-            </DataGrid.Columns>
-        </DataGrid>
-
-        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+        <Label Content="Clean sheet groups:" Grid.Row="5"/>
+        <CheckBox x:Name="chbGroups" Grid.Row="5" Grid.Column="1"/>
+        <StackPanel Grid.Row="7" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="btnOK" Width="90" Height="25" Margin="0,0,5,0" Content="OK" Click="btnOK_Click"/>
             <Button x:Name="btnCancel" Width="90" Margin="5,0,0,0" Content="Cancel" Height="25" Click="btnCancel_Click"/>
         </StackPanel>        
