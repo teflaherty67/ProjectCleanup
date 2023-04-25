@@ -30,13 +30,21 @@ namespace ProjectCleanup
 
             // delete selected groups in the Inactive Category
 
-            // adjust the category names to eliminate 00
+            // adjust the View Templates to eliminate category 00 and bump current 07 and up by 1 number
+                // if view category = 01 make it 08 etc
 
             // delete unused views in Categories: 01 - 09, elevation in 13 & views named soffit in 14
 
-            // delete unused schedules
+            // delete unused schedules - code below works; this step is complete
+
+            // remove the Project Parameter "Code Bracing"
 
             // put any code needed for the form here
+
+                // get all the sheet groups in the Inactive category
+                // put them in a list to bind to the listbox
+
+            List<string> inactiveGroups = Utils.GetAllSheetGroupsByCategory(doc, "Inactive");
 
             // open form
             frmProjectCleanup curForm = new frmProjectCleanup()
@@ -88,6 +96,59 @@ namespace ProjectCleanup
                     clientInfo.ClientName = nameClient;
                 }
 
+         // DELETE UNUSED VIEWS
+
+                // create a list of views to delete
+                List<View> viewsToDelete = new List<View>();
+
+                // create a list opf viewsd to keep
+                List<View> viewsToKeep = new List<View>();
+
+                // get all the views in the project by category
+                List<View> listViews = Utils.GetAllViewsByCategory(doc, "01:Floor Plans");
+                List<View> listCat02 = Utils.GetAllViewsByCategory(doc, "02:Elevations");
+                List<View> listCat03 = Utils.GetAllViewsByCategory(doc, "03:Roof Plans");
+                List<View> listCat04 = Utils.GetAllViewsByCategory(doc, "04:Sections");
+                List<View> listCat05 = Utils.GetAllViewsByCategory(doc, "05:Interior Elevations");
+                List<View> listCat06 = Utils.GetAllViewsByCategory(doc, "06:Electrical Plans");
+                List<View> listCat07 = Utils.GetAllViewsByCategory(doc, "07:Form/Foundation Plans");
+                List<View> listCat08 = Utils.GetAllViewsByCategory(doc, "08:Ceiling Framing Plans");
+                List<View> listCat09 = Utils.GetAllViewsByCategory(doc, "09:Roof Framing Plans");
+                List<View> listCat13 = Utils.GetAllViewsByCategoryAndViewTemplate(doc, "13:Presentation Views", "13-Elevation Presentation");
+                List<View> listCat14 = Utils.GetAllViewsByCategoryAndViewTemplate(doc, "14:Ceiling Views", "14-Soffit");
+
+                // combine the lists together
+                listViews.AddRange(listCat02);
+                listViews.AddRange(listCat03);
+                listViews.AddRange(listCat04);
+                listViews.AddRange(listCat05);
+                listViews.AddRange(listCat06);
+                listViews.AddRange(listCat07);
+                listViews.AddRange(listCat08);
+                listViews.AddRange(listCat09);
+                listViews.AddRange(listCat13);
+                listViews.AddRange(listCat14);
+
+                // get all the sheets in the project
+                List<ViewSheet> sheetList = Utils.GetAllSheets(doc);
+
+                // loop through the views
+                foreach (View curView in listViews)
+                {
+                    // check if the view is already on a sheet
+                    if (Viewport.CanAddViewToSheet(doc, sheetList.Id, curView.Id))
+                    {
+                        // check if the view has dependent views
+                        if(curView.GetDependentViewIds().Count() == 0)
+                        {
+                            // add view to list of views to delete
+                            viewsToDelete.Add(curView);
+                        }
+                    }
+                }
+
+        // DELETE UNUSED SCHEDULES
+
                 string areaString = "";
                 string roofString = "";
 
@@ -115,6 +176,10 @@ namespace ProjectCleanup
                         doc.Delete(curSchedule.Id);
                     }                    
                 }
+
+        
+               
+           
 
                 t.Commit();
             }            
