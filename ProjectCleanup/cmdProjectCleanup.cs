@@ -28,6 +28,14 @@ namespace ProjectCleanup
             Application app = uiapp.Application;
             Document doc = uidoc.Document;
 
+            // delete selected groups in the Inactive Category
+
+            // adjust the category names to eliminate 00
+
+            // delete unused views in Categories: 01 - 09, elevation in 13 & views named soffit in 14
+
+            // delete unused schedules
+
             // put any code needed for the form here
 
             // open form
