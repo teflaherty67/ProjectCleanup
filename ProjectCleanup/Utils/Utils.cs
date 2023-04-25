@@ -47,8 +47,17 @@ namespace ProjectCleanup
             return m_sheets;
         }
 
-        internal static List<string> GetAllSheetGroupsByCategory(Document doc, string v)
+        internal static List<string> GetAllSheetGroupsByCategory(Document doc, string catName)
         {
+            // get all the sheets in the project
+
+            // loop through the sheets and find ones in the specified category
+
+            // for each sheet found get the value of the group parameter
+
+            // add each group name to a list
+
+            // return the list
             throw new NotImplementedException();
         }
 
