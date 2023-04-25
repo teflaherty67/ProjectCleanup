@@ -59,8 +59,8 @@
     <Compile Include="App.cs" />
     <Compile Include="Classes\ButtonDataClass.cs" />
     <Compile Include="cmdProjectCleanup.cs" />
-    <Compile Include="Forms\frmProjectCleanup - Copy.xaml.cs">
-      <DependentUpon>frmProjectCleanup - Copy.xaml</DependentUpon>
+    <Compile Include="Forms\frmProjectCleanup.xaml.cs">
+      <DependentUpon>frmProjectCleanup.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -70,9 +70,6 @@
     <Compile Include="Utils\CommandAvailability.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Utils.cs" />
-    <Compile Include="Forms\frmProjectCleanup.xaml.cs">
-      <DependentUpon>frmProjectCleanup.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ProjectCleanup.addin" />
@@ -86,13 +83,9 @@
     <EmbeddedResource Include="Resources\Blue_16.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Forms\frmProjectCleanup - Copy.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Forms\frmProjectCleanup.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

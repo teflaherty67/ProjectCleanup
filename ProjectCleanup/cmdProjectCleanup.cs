@@ -98,13 +98,15 @@ namespace ProjectCleanup
                 }
                 else if (floorNum != "1")
                 {
-                    areaString = "(single-level)";
-                    roofString = "(single-space)";
+                    areaString = "(single level)";
+                    roofString = "(single space)";
                 }
 
                 List<ViewSchedule> scheduleList = GetScheduleByNameContains(doc, areaString);                
 
                 List<ViewSchedule> roofList = GetScheduleByNameContains(doc, roofString);
+
+                scheduleList.AddRange(roofList);
 
                 if (curForm.GetCheckBoxSchedules() == true)
                 {
@@ -113,8 +115,6 @@ namespace ProjectCleanup
                         doc.Delete(curSchedule.Id);
                     }                    
                 }
-
-
 
                 t.Commit();
             }            

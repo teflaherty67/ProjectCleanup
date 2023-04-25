@@ -98,6 +98,16 @@ namespace ProjectCleanup
             return false;
         }
 
+        private void btnAll_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnNone_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
@@ -108,6 +118,6 @@ namespace ProjectCleanup
         {
             this.DialogResult= false;
             this.Close();
-        }
+        }        
     }
 }
