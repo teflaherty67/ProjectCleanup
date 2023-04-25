@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ProjectCleanup"
              mc:Ignorable="d" 
-             d:DesignWidth="340" d:DesignHeight="400"  Title="Project Cleanup" MinWidth="320" MinHeight="380">
+             d:DesignWidth="340" d:DesignHeight="400"  Title="Project Cleanup" MinWidth="300" MinHeight="380">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -29,8 +29,16 @@
         <Label Content="Number of floors:" Grid.Row="1"/>
         <ComboBox x:Name="cmbFloors" Grid.Row="1" Grid.Column="1" Height="25"/>
         <Label Grid.Row="2" Content="Select sheet groups to delete:"/>
-        
-        
+        <ListBox Grid.Row="3">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Margin="5" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                        <TextBlock Text="{Binding ItemName}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <StackPanel Grid.Row="3" Grid.Column="1">
             <Button x:Name="btnAll" Width="90" Grid.Row="3" Grid.Column="1" Height="25" Content="Chcek All" HorizontalAlignment="Right" Click="btnAll_Click"/>
             <Button x:Name="btnNone" Grid.Row="3" Grid.Column="1" Content="Check None" Width="90" Height="25" HorizontalAlignment="Right" Click="btnNone_Click" Margin="0,10,0,0"/>
