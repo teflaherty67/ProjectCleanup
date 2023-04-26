@@ -48,19 +48,38 @@ namespace ProjectCleanup
             return m_sheets;
         }
 
-        //internal static List<string> GetAllSheetGroupsByCategory(Document doc, string catName)
-        //{
-        //    // get all the sheets in the project
+        internal static List<string> GetAllSheetGroupsByCategory(Document doc, string catName)
+        {
+            // get all the sheets in the project
+            List<ViewSheet> m_sheetList = GetAllSheets(doc);
 
-        //    // loop through the sheets and find ones in the specified category
+            // create list for sheets in specified category
+            List<ViewSheet> m_returnSheets = new List<ViewSheet>();
 
-        //    // for each sheet found get the value of the group parameter
+            // get the value for the parameter
+            string paramName = GetParameterValueByName(ViewSheet, BuiltInParameter.ELEM_CATEGORY_PARAM);
+            
+            // create a return list
+            List<string> m_returnList = new List<string>();
 
-        //    // add each group name to a list
+            // loop through the sheets and find ones in the specified category
+            foreach(ViewSheet curSheet in m_sheetList)
+            {
+                if (paramName == catName)
+                    m_returnSheets.Add(curSheet);
 
-        //    // return the list
-        //    throw new NotImplementedException();
-        //}
+                string groupName = GetParameterValueByName(ViewSheet, "Group");
+
+                // for each sheet found get the value of the group parameter
+                foreach (ViewSheet viewSheet in m_sheetList)
+
+                    // add each group name to the list
+                    m_returnList.Add(groupName);                    
+            }         
+
+            // return the list
+            return m_returnList.Distinct().ToList();            
+        }
 
         internal static List<View> GetAllViews(Document doc)
         {
@@ -86,9 +105,9 @@ namespace ProjectCleanup
 
             string viewCat = GetParameterValueByName(ViewType, "Category");
 
-            foreach(View curView in m_colViews)
+            foreach (View curView in m_colViews)
             {
-                
+
             }
         }
 
@@ -111,11 +130,30 @@ namespace ProjectCleanup
             return "";
         }
 
+        private static string GetParameterValueByName(ViewSheet viewType, string paramName)
+        {
+            IList<Parameter> paramList = ViewSheet.GetParameters(paramName);
+
+            if (paramList != null)
+                try
+                {
+                    Parameter param = paramList[0];
+                    string paramValue = param.AsValueString();
+                    return paramValue;
+                }
+                catch (System.ArgumentOutOfRangeException)
+                {
+                    return null;
+                }
+
+            return "";
+        }
+
         internal static List<View> GetAllViewsByCategoryAndViewTemplate(Document doc, string catName, string vtName)
         {
             List<View> m_colViews = GetAllViews(doc);
 
-            List<View> m_returnList = new List<View>;
+            List<View> m_returnList = new List<View>();
 
             foreach (View curView in m_colViews)
             {

@@ -31,7 +31,7 @@ namespace ProjectCleanup
             // delete selected groups in the Inactive Category
 
             // adjust the View Templates to eliminate category 00 and bump current 07 and up by 1 number
-                // if view category = 01 make it 08 etc
+            // if view category = 01 make it 08 etc
 
             // delete unused views in Categories: 01 - 09, elevation in 13 & views named soffit in 14
 
@@ -41,10 +41,12 @@ namespace ProjectCleanup
 
             // put any code needed for the form here
 
-                // get all the sheet groups in the Inactive category
-                // put them in a list to bind to the listbox
+            // get all the sheet groups in the Inactive category
+            // put them in a list to bind to the listbox
 
             //List<string> inactiveGroups = Utils.GetAllSheetGroupsByCategory(doc, "Inactive");
+
+           
 
             // open form
             frmProjectCleanup curForm = new frmProjectCleanup()
@@ -139,13 +141,13 @@ namespace ProjectCleanup
                 // loop through the views
                 foreach (View curView in listViews)
                 {
-            // MODIFIED FROM MRM; DOESN'T WORK
+                    // MODIFIED FROM MRM; DOESN'T WORK
 
                     // check if the view is already on a sheet            
                     if (Viewport.CanAddViewToSheet(doc, sheetId, curView.Id))
                     {
                         // check if the view has dependent views
-                        if(curView.GetDependentViewIds().Count() == 0)
+                        if (curView.GetDependentViewIds().Count() == 0)
                         {
                             // add view to list of views to delete
                             viewsToDelete.Add(curView);
@@ -153,7 +155,7 @@ namespace ProjectCleanup
                     }
                 }
 
-        // DELETE UNUSED SCHEDULES
+                // DELETE UNUSED SCHEDULES
 
                 string areaString = "";
                 string roofString = "";

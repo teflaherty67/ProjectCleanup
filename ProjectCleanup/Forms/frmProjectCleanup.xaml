@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ProjectCleanup"
              mc:Ignorable="d" 
-             d:DesignWidth="320" d:DesignHeight="440"  Title="Project Cleanup" MinWidth="300" MinHeight="380">
+             d:DesignWidth="380" d:DesignHeight="440"  Title="Project Cleanup" MinWidth="360" MinHeight="380">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -46,7 +46,7 @@
             <CheckBox x:Name="chbSchedules" Grid.Row="5" VerticalAlignment="Center" Margin="5,0,0,5" Content="Delete unused schedules"/>
             <CheckBox x:Name="chbSchedRename" Grid.Row="6" VerticalAlignment="Center" Margin="5,0,0,5" Content="Rename Schedules"/>
             <CheckBox x:Name="chbCode" Grid.Row="7" VerticalAlignment="Center" Content="Clean plan code" Margin="5,0,0,5"/>
-            <CheckBox x:Name="chbGroups" Grid.Row="8" VerticalAlignment="Center" Margin="5,0,0,0" Content="Clean sheet names" />
+            <CheckBox x:Name="chbSheets" Grid.Row="8" VerticalAlignment="Center" Margin="5,0,0,0" Content="Clean sheet names" />
         </StackPanel>        
         <StackPanel Grid.Row="10" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="btnOK" Width="90" Height="25" Margin="0,0,5,0" Content="OK" Click="btnOK_Click"/>

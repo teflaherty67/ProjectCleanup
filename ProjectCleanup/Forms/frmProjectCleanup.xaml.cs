@@ -25,10 +25,17 @@ namespace ProjectCleanup
     /// </summary>
     public partial class frmProjectCleanup : Window
     {
+        List<System.Windows.Controls.CheckBox> allCheckboxes = new List<System.Windows.Controls.CheckBox>();
 
         public frmProjectCleanup()
         {
             InitializeComponent();
+
+            allCheckboxes.Add(chbViews);
+            allCheckboxes.Add(chbSchedules);
+            allCheckboxes.Add(chbSchedRename);
+            allCheckboxes.Add(chbCode);
+            allCheckboxes.Add(chbSheets);
 
             List<string> listClients = new List<string> { "Central Texas", "Dallas/Ft Worth",
                 "Florida", "Houston", "Maryland", "Minnesota", "Oklahoma", "Pennsylvania",
@@ -81,6 +88,16 @@ namespace ProjectCleanup
             return false;
         }
 
+        internal bool GetCheckBoxSchedRename()
+        {
+            if (chbSchedRename.IsChecked == true)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         internal bool GetCheckBoxCode()
         {
             if (chbCode.IsChecked == true)
@@ -91,9 +108,9 @@ namespace ProjectCleanup
             return false;
         }
 
-        internal bool GetCheckBoxGroups()
+        internal bool GetCheckBoxSheets()
         {
-            if (chbGroups.IsChecked == true)
+            if (chbSheets.IsChecked == true)
             {
                 return true;
             }
@@ -103,12 +120,18 @@ namespace ProjectCleanup
 
         private void btnAll_Click(object sender, RoutedEventArgs e)
         {
-           
+           foreach(System.Windows.Controls.CheckBox cBox in allCheckboxes)
+            {
+                cBox.IsChecked = true;
+            }
         }        
 
         private void btnNone_Click(object sender, RoutedEventArgs e)
         {
-
+            foreach (System.Windows.Controls.CheckBox cBox in allCheckboxes)
+            {
+                cBox.IsChecked = false;
+            }
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
