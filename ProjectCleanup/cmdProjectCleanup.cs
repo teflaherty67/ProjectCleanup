@@ -44,7 +44,7 @@ namespace ProjectCleanup
                 // get all the sheet groups in the Inactive category
                 // put them in a list to bind to the listbox
 
-            List<string> inactiveGroups = Utils.GetAllSheetGroupsByCategory(doc, "Inactive");
+            //List<string> inactiveGroups = Utils.GetAllSheetGroupsByCategory(doc, "Inactive");
 
             // open form
             frmProjectCleanup curForm = new frmProjectCleanup()
@@ -96,7 +96,9 @@ namespace ProjectCleanup
                     clientInfo.ClientName = nameClient;
                 }
 
-         // DELETE UNUSED VIEWS
+        // POPULATE LISTBOX WITH SHEET GROUPS
+
+        // DELETE UNUSED VIEWS
 
                 // create a list of views to delete
                 List<View> viewsToDelete = new List<View>();
@@ -132,11 +134,15 @@ namespace ProjectCleanup
                 // get all the sheets in the project
                 List<ViewSheet> sheetList = Utils.GetAllSheets(doc);
 
+                ElementId sheetId = sheetList.First<ViewSheet>().Id;
+
                 // loop through the views
                 foreach (View curView in listViews)
                 {
-                    // check if the view is already on a sheet
-                    if (Viewport.CanAddViewToSheet(doc, sheetList.Id, curView.Id))
+            // MODIFIED FROM MRM; DOESN'T WORK
+
+                    // check if the view is already on a sheet            
+                    if (Viewport.CanAddViewToSheet(doc, sheetId, curView.Id))
                     {
                         // check if the view has dependent views
                         if(curView.GetDependentViewIds().Count() == 0)

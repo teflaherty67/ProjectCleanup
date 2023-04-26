@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Autodesk.Revit.DB;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +13,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
@@ -100,8 +103,8 @@ namespace ProjectCleanup
 
         private void btnAll_Click(object sender, RoutedEventArgs e)
         {
-
-        }
+           
+        }        
 
         private void btnNone_Click(object sender, RoutedEventArgs e)
         {
@@ -110,14 +113,14 @@ namespace ProjectCleanup
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = true;
-            this.Close();
+        this.DialogResult = true;
+        this.Close();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult= false;
-            this.Close();
+        this.DialogResult= false;
+        this.Close();
         }        
     }
 }

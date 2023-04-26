@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ProjectCleanup
@@ -47,19 +48,19 @@ namespace ProjectCleanup
             return m_sheets;
         }
 
-        internal static List<string> GetAllSheetGroupsByCategory(Document doc, string catName)
-        {
-            // get all the sheets in the project
+        //internal static List<string> GetAllSheetGroupsByCategory(Document doc, string catName)
+        //{
+        //    // get all the sheets in the project
 
-            // loop through the sheets and find ones in the specified category
+        //    // loop through the sheets and find ones in the specified category
 
-            // for each sheet found get the value of the group parameter
+        //    // for each sheet found get the value of the group parameter
 
-            // add each group name to a list
+        //    // add each group name to a list
 
-            // return the list
-            throw new NotImplementedException();
-        }
+        //    // return the list
+        //    throw new NotImplementedException();
+        //}
 
         internal static List<View> GetAllViews(Document doc)
         {
@@ -79,12 +80,47 @@ namespace ProjectCleanup
 
         internal static List<View> GetAllViewsByCategory(Document doc, string catName)
         {
-            throw new NotImplementedException();
+            List<View> m_colViews = GetAllViews(doc);
+
+            List<View> m_returnList = new List<View>();
+
+            string viewCat = GetParameterValueByName(ViewType, "Category");
+
+            foreach(View curView in m_colViews)
+            {
+                
+            }
         }
 
-        internal static List<View> GetAllViewsByCategoryAndViewTemplate(Document doc, string v1, string v2)
+        private static string GetParameterValueByName(ViewType viewType, string paramName)
         {
-            throw new NotImplementedException();
+            IList<Parameter> paramList = ViewType.GetParameters(paramName);
+
+            if (paramList != null)
+                try
+                {
+                    Parameter param = paramList[0];
+                    string paramValue = param.AsValueString();
+                    return paramValue;
+                }
+                catch (System.ArgumentOutOfRangeException)
+                {
+                    return null;
+                }
+
+            return "";
+        }
+
+        internal static List<View> GetAllViewsByCategoryAndViewTemplate(Document doc, string catName, string vtName)
+        {
+            List<View> m_colViews = GetAllViews(doc);
+
+            List<View> m_returnList = new List<View>;
+
+            foreach (View curView in m_colViews)
+            {
+
+            }
         }
     }
 }
