@@ -161,15 +161,49 @@ namespace ProjectCleanup
             }
         }
 
-        internal static Parameter GetParameterByName(Document doc, string paramName)
+        internal static Parameter GetParameterByName(Element element, string paramName)
         {
-            foreach (Parameter curParam in doc.Parameters)
+            foreach (Parameter curParam in element.Parameters)
             {
                 if (curParam.Definition.Name.ToString() == paramName)
                     return curParam;
             }
 
             return null;
+        }
+
+        internal static List<ViewSchedule> GetScheduleByNameContains(Document doc, string scheduleString)
+        {
+            List<ViewSchedule> m_scheduleList = GetAllSchedules(doc);
+
+            List<ViewSchedule> m_returnList = new List<ViewSchedule>();
+
+            foreach (ViewSchedule curSchedule in m_scheduleList)
+            {
+                if (curSchedule.Name.Contains(scheduleString))
+                    m_returnList.Add(curSchedule);
+            }
+
+            return m_returnList;
+        }
+
+        public static List<ViewSchedule> GetAllSchedules(Document doc)
+        {
+            List<ViewSchedule> m_schedList = new List<ViewSchedule>();
+
+            FilteredElementCollector curCollector = new FilteredElementCollector(doc);
+            curCollector.OfClass(typeof(ViewSchedule));
+
+            //loop through views and check if schedule - if so then put into schedule list
+            foreach (ViewSchedule curView in curCollector)
+            {
+                if (curView.ViewType == ViewType.Schedule)
+                {
+                    m_schedList.Add((ViewSchedule)curView);
+                }
+            }
+
+            return m_schedList;
         }
     }
 }

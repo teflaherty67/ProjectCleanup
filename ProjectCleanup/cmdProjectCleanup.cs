@@ -141,7 +141,7 @@ namespace ProjectCleanup
                 // loop through the views
                 foreach (View curView in listViews)
                 {
-                    // MODIFIED FROM MRM; DOESN'T WORK
+        // MODIFIED FROM MRM; DOESN'T WORK
 
                     // check if the view is already on a sheet            
                     if (Viewport.CanAddViewToSheet(doc, sheetId, curView.Id))
@@ -171,9 +171,9 @@ namespace ProjectCleanup
                     roofString = "(single space)";
                 }
 
-                List<ViewSchedule> areaSchedList = GetScheduleByNameContains(doc, areaString);                
+                List<ViewSchedule> areaSchedList = Utils.GetScheduleByNameContains(doc, areaString);                
 
-                List<ViewSchedule> roofSchedList = GetScheduleByNameContains(doc, roofString);
+                List<ViewSchedule> roofSchedList = Utils.GetScheduleByNameContains(doc, roofString);
 
                 areaSchedList.AddRange(roofSchedList);
 
@@ -188,7 +188,7 @@ namespace ProjectCleanup
         // RENAME SCHEDULES
 
                 // get all the schedules
-                List<ViewSchedule> scheduleList = GetAllSchedules(doc);
+                List<ViewSchedule> scheduleList = Utils.GetAllSchedules(doc);
                 
                 if (curForm.GetCheckBoxSchedRename() == true)
                 {
@@ -217,7 +217,10 @@ namespace ProjectCleanup
 
         // DELETE CODE BRACING PARAMETER
 
-                Parameter paramBracing = Utils.GetParameterByName(doc, "Code Bracing");
+                FilteredElementCollector collector = new FilteredElementCollector(doc);
+                ICollection<Element> sheets = collector.OfClass(typeof(ViewSheet)).ToElements();
+
+                Parameter paramBracing = Utils.GetParameterByName(sheets, "Code Bracing");
 
                 if (curForm.GetCheckBoxCode() == true)
                 {
@@ -229,18 +232,33 @@ namespace ProjectCleanup
                 // get all the sheets
                 List<ViewSheet> activeSheets = Utils.GetAllSheets(doc);
 
-                // create variables
-                string codeString = "";
-                string originalName = "";
-
                 if (curForm.GetCheckBoxSheets() == true)
                 {
                     foreach (ViewSheet curSheet in activeSheets)
-                        string originalName = curSheet.Name;
+                    {
+                        string sheetName = curSheet.Name;
+                        // check if sheet name ends with '-#'
+                        if (sheetName.Length > 2 && sheetName[sheetName.Length - 2] == '-')
+                        {
+                            char lastChar = sheetName[sheetName.Length - 1];
+                            // check if the last character is a digit
+                            if (Char.IsDigit(lastChar))
+                            {
+                                // check if sheet name ends with '-#g'
+                                if (sheetName.EndsWith("-" + lastChar + "g"))
+                                {
+                                    sheetName = sheetName.Substring(0, sheetName.Length - 2) + "g";
+                                }
+                                else
+                                {
+                                    sheetName = sheetName.Substring(0, sheetName.Length - 2);
+                                }
+                                // set the new sheet name
+                                curSheet.Name = sheetName;
+                            }
+                        }
+                    }
                 }
-
-
-
 
                 t.Commit();
             }            
@@ -248,39 +266,9 @@ namespace ProjectCleanup
             return Result.Succeeded;
         }
 
-        private List<ViewSchedule> GetScheduleByNameContains(Document doc, string scheduleString)
-        {
-            List<ViewSchedule> m_scheduleList = GetAllSchedules(doc);
+        
 
-            List<ViewSchedule> m_returnList = new List<ViewSchedule>();
-
-            foreach (ViewSchedule curSchedule in m_scheduleList)
-            {
-                if (curSchedule.Name.Contains(scheduleString))
-                    m_returnList.Add(curSchedule);
-            }
-
-            return m_returnList;
-        }
-
-        public static List<ViewSchedule> GetAllSchedules(Document doc)
-        {
-            List<ViewSchedule> m_schedList = new List<ViewSchedule>();
-
-            FilteredElementCollector curCollector = new FilteredElementCollector(doc);
-            curCollector.OfClass(typeof(ViewSchedule));
-
-            //loop through views and check if schedule - if so then put into schedule list
-            foreach (ViewSchedule curView in curCollector)
-            {
-                if (curView.ViewType == ViewType.Schedule)
-                {
-                    m_schedList.Add((ViewSchedule)curView);
-                }
-            }
-
-            return m_schedList;
-        }
+        
 
         public static String GetMethod()
         {
