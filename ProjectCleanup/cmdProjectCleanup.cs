@@ -155,7 +155,7 @@ namespace ProjectCleanup
                     }
                 }
 
-                // DELETE UNUSED SCHEDULES
+        // DELETE UNUSED SCHEDULES
 
                 string areaString = "";
                 string roofString = "";
@@ -171,23 +171,76 @@ namespace ProjectCleanup
                     roofString = "(single space)";
                 }
 
-                List<ViewSchedule> scheduleList = GetScheduleByNameContains(doc, areaString);                
+                List<ViewSchedule> areaSchedList = GetScheduleByNameContains(doc, areaString);                
 
-                List<ViewSchedule> roofList = GetScheduleByNameContains(doc, roofString);
+                List<ViewSchedule> roofSchedList = GetScheduleByNameContains(doc, roofString);
 
-                scheduleList.AddRange(roofList);
+                areaSchedList.AddRange(roofSchedList);
 
                 if (curForm.GetCheckBoxSchedules() == true)
                 {
-                    foreach (ViewSchedule curSchedule in scheduleList)
+                    foreach (ViewSchedule curSchedule in areaSchedList)
                     {
                         doc.Delete(curSchedule.Id);
                     }                    
                 }
 
-        
-               
-           
+        // RENAME SCHEDULES
+
+                // get all the schedules
+                List<ViewSchedule> scheduleList = GetAllSchedules(doc);
+                
+                if (curForm.GetCheckBoxSchedRename() == true)
+                {
+                    foreach(ViewSchedule curSchedule in scheduleList)
+                    {
+                        // create a variable for the schedule name
+                        string[] inputString = curSchedule.Name.Split('-');
+                        string curElev = inputString[1][0].ToString();
+
+                        string replaceString = "Elevation " + curElev;
+
+                        string originalString = curSchedule.Name;
+
+                        // check if first character after hypen is "E"
+                        if (curElev != "E")
+                        {
+                            string[] splitString = curSchedule.Name.Split('-');
+                            splitString[1] = replaceString;
+
+                            string newString = string.Join("-", splitString);
+                        }
+                        else
+                            continue;
+                    }
+                }
+
+        // DELETE CODE BRACING PARAMETER
+
+                Parameter paramBracing = Utils.GetParameterByName(doc, "Code Bracing");
+
+                if (curForm.GetCheckBoxCode() == true)
+                {
+                    doc.Delete(paramBracing.Id);
+                }
+
+        // DELETE THE CODE FILTER FROM SHEET NAME
+
+                // get all the sheets
+                List<ViewSheet> activeSheets = Utils.GetAllSheets(doc);
+
+                // create variables
+                string codeString = "";
+                string originalName = "";
+
+                if (curForm.GetCheckBoxSheets() == true)
+                {
+                    foreach (ViewSheet curSheet in activeSheets)
+                        string originalName = curSheet.Name;
+                }
+
+
+
 
                 t.Commit();
             }            

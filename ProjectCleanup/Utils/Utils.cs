@@ -160,5 +160,16 @@ namespace ProjectCleanup
 
             }
         }
+
+        internal static Parameter GetParameterByName(Document doc, string paramName)
+        {
+            foreach (Parameter curParam in doc.Parameters)
+            {
+                if (curParam.Definition.Name.ToString() == paramName)
+                    return curParam;
+            }
+
+            return null;
+        }
     }
 }
