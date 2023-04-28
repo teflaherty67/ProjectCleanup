@@ -40,7 +40,8 @@ namespace ProjectCleanup
             allCheckboxes.Add(chbSheets);
 
             groupNames = new ObservableCollection<string>(uniqueGroups);
-            this.DataContext = this;
+            
+            lbxGroups.ItemsSource = groupNames;
 
             List<string> listClients = new List<string> { "Central Texas", "Dallas/Ft Worth",
                 "Florida", "Houston", "Maryland", "Minnesota", "Oklahoma", "Pennsylvania",
