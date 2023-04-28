@@ -5,47 +5,49 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ProjectCleanup"
              mc:Ignorable="d" 
-             d:DesignHeight="375" d:DesignWidth="320" Title="Project Cleanup" MinWidth="300" MinHeight="350">
+             d:DesignWidth="380" d:DesignHeight="440"  Title="Project Cleanup" MinWidth="360" MinHeight="380">
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="35"/>
+            <RowDefinition Height="110"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
-        <Label Content="Client Name:"/>
-        <ComboBox x:Name="cmbClient" Grid.Column="1" Height="25"/>
-        <Label Content="# of Floors:" Grid.Row="1"/>
-        <ComboBox x:Name="cmbFloors" Grid.Row="1" Grid.Column="1" Height="25"/>
-        <Label Content="Delete unused views:" Grid.Row="2"/>
-        <CheckBox x:Name="chbViews" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
-        <Label Content="Delete unused schedules:" Grid.Row="3"/>
-        <CheckBox x:Name="chbSchedules" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"/>
-        <Label Content="Project code:" Grid.Row="4"/>
-        <CheckBox x:Name="chbCode" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center"/>
-        <DataGrid x:Name="grpData" Grid.Row="5"
-                  GridLinesVisibility="All"
-                  AlternatingRowBackground="AliceBlue"
-                  CanUserAddRows="False"
-                  CanUserReorderColumns="False"
-                  SelectionMode="Extended"
-                  AutoGenerateColumns="False"
-                  EnableRowVirtualization="False"
-                  EnableColumnVirtualization="False" Grid.ColumnSpan="2">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Sheet Group Name" Width="*"/>
-                <DataGridCheckBoxColumn Header="Clean Group" Width="100"/>
-            </DataGrid.Columns>
-        </DataGrid>
-
-        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+        <GroupBox Header="Client Name:" BorderThickness="0">
+            <ComboBox x:Name="cmbClient" Height="25" Width="100" HorizontalAlignment="Left"/>
+        </GroupBox>
+        <GroupBox Grid.Row="1" BorderThickness="0" Header="Number of Floors:">
+            <ComboBox x:Name="cmbFloors" Height="25" Width="100" HorizontalAlignment="Left"/>
+        </GroupBox>
+        <StackPanel Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Center">
+            <Button x:Name="btnAll" Width="90" Height="25" Content="Chcek All" HorizontalAlignment="Right" Click="btnAll_Click"/>
+            <Button x:Name="btnNone" Content="Check None" Width="90" Height="25" HorizontalAlignment="Right" Click="btnNone_Click" Margin="0,10,0,0"/>
+        </StackPanel>
+        <Label Grid.Row="2" Content="Select sheet groups to delete:"/>
+        <ListBox x:Name="lbxGroups" Grid.Row="3" Margin="5,0,0,0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Margin="5" IsChecked="{Binding IsSelected, Mode=TwoWay}" Content="{Binding}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <StackPanel Grid.Row="4">
+            <CheckBox x:Name="chbViews" Grid.Row="4" VerticalAlignment="Center" Content="Delete unused views" Margin="5,5,0,5"/>
+            <CheckBox x:Name="chbSchedules" Grid.Row="5" VerticalAlignment="Center" Margin="5,0,0,5" Content="Delete unused schedules"/>
+            <CheckBox x:Name="chbSchedRename" Grid.Row="6" VerticalAlignment="Center" Margin="5,0,0,5" Content="Rename Schedules"/>
+            <CheckBox x:Name="chbCode" Grid.Row="7" VerticalAlignment="Center" Content="Clean plan code" Margin="5,0,0,5"/>
+            <CheckBox x:Name="chbSheets" Grid.Row="8" VerticalAlignment="Center" Margin="5,0,0,0" Content="Clean sheet names" />
+        </StackPanel>        
+        <StackPanel Grid.Row="10" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="btnOK" Width="90" Height="25" Margin="0,0,5,0" Content="OK" Click="btnOK_Click"/>
             <Button x:Name="btnCancel" Width="90" Margin="5,0,0,0" Content="Cancel" Height="25" Click="btnCancel_Click"/>
         </StackPanel>        

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Autodesk.Revit.DB;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +13,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
@@ -22,14 +25,23 @@ namespace ProjectCleanup
     /// </summary>
     public partial class frmProjectCleanup : Window
     {
-        ObservableCollection<DataClass1> dataList { get; set; }
-        ObservableCollection<string> dataItems { get; set; }
+        List<CheckBox> allCheckboxes = new List<CheckBox>();
 
-        public frmProjectCleanup()
+        ObservableCollection<string> groupNames { get; set; }
+
+        public frmProjectCleanup(List<string> uniqueGroups)
         {
             InitializeComponent();
 
-            dataList = new ObservableCollection<DataClass1>();
+            allCheckboxes.Add(chbViews);
+            allCheckboxes.Add(chbSchedules);
+            allCheckboxes.Add(chbSchedRename);
+            allCheckboxes.Add(chbCode);
+            allCheckboxes.Add(chbSheets);
+
+            groupNames = new ObservableCollection<string>(uniqueGroups);
+
+            lbxGroups.ItemsSource = groupNames;
 
             List<string> listClients = new List<string> { "Central Texas", "Dallas/Ft Worth",
                 "Florida", "Houston", "Maryland", "Minnesota", "Oklahoma", "Pennsylvania",
@@ -82,6 +94,16 @@ namespace ProjectCleanup
             return false;
         }
 
+        internal bool GetCheckBoxSchedRename()
+        {
+            if (chbSchedRename.IsChecked == true)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         internal bool GetCheckBoxCode()
         {
             if (chbCode.IsChecked == true)
@@ -92,22 +114,42 @@ namespace ProjectCleanup
             return false;
         }
 
+        internal bool GetCheckBoxSheets()
+        {
+            if (chbSheets.IsChecked == true)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private void btnAll_Click(object sender, RoutedEventArgs e)
+        {
+           foreach(System.Windows.Controls.CheckBox cBox in allCheckboxes)
+            {
+                cBox.IsChecked = true;
+            }
+        }        
+
+        private void btnNone_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (System.Windows.Controls.CheckBox cBox in allCheckboxes)
+            {
+                cBox.IsChecked = false;
+            }
+        }
+
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = true;
-            this.Close();
+        this.DialogResult = true;
+        this.Close();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult= false;
-            this.Close();
-        }
-    }
-
-    public class DataClass1
-    {
-        public string Item1 { get; set; }
-        public bool Item2 { get; set; }
+        this.DialogResult= false;
+        this.Close();
+        }        
     }
 }
