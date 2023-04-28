@@ -6,7 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace ProjectCleanup
 {
@@ -225,5 +227,23 @@ namespace ProjectCleanup
 
             return m_schedList;
         }
+
+        internal static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+                if (child != null && child is T)
+                    return (T)child;
+                else
+                {
+                    T foundChild = FindVisualChild<T>(child);
+                    if (foundChild != null)
+                        return foundChild;
+                }
+            }
+            return null;
+        }
+
     }
 }

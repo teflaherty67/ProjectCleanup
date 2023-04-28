@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 #endregion
@@ -91,9 +92,24 @@ namespace ProjectCleanup
                     clientInfo.ClientName = nameClient;
                 }
 
-        // POPULATE LISTBOX WITH SHEET GROUPS
+                // DELETE SELECTED GROUPS
 
-        // DELETE UNUSED VIEWS
+                foreach (var item in curForm.lbxGroups.Items)
+                {
+                    ListBoxItem listBoxItem = curForm.lbxGroups.ItemContainerGenerator.ContainerFromItem(item) as ListBoxItem;
+                    if (listBoxItem != null)
+                    {
+                        CheckBox checkBox = Utils.FindVisualChild<CheckBox>(listBoxItem);
+                        if (checkBox != null && checkBox.IsChecked == true)
+                        {
+                            string groupName = checkBox.Tag as string;
+                            // do something with checked checkbox
+                        }
+                    }
+                }
+
+
+                // DELETE UNUSED VIEWS
 
                 // create a list of views to delete
                 List<View> viewsToDelete = new List<View>();
