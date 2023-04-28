@@ -29,7 +29,7 @@ namespace ProjectCleanup
 
         ObservableCollection<string> groupNames { get; set; }
 
-        public frmProjectCleanup(List<string> _groups)
+        public frmProjectCleanup(List<string> uniqueGroups)
         {
             InitializeComponent();
 
@@ -39,9 +39,9 @@ namespace ProjectCleanup
             allCheckboxes.Add(chbCode);
             allCheckboxes.Add(chbSheets);
 
-            this.DataContext = this;
+            groupNames = new ObservableCollection<string>(uniqueGroups);
 
-            dataItems = new ObservableCollection<string>(_groups);              
+            lbxGroups.ItemsSource = groupNames;
 
             List<string> listClients = new List<string> { "Central Texas", "Dallas/Ft Worth",
                 "Florida", "Houston", "Maryland", "Minnesota", "Oklahoma", "Pennsylvania",

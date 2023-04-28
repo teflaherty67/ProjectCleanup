@@ -94,7 +94,19 @@ namespace ProjectCleanup
 
                 // DELETE SELECTED GROUPS
 
-               
+                foreach (var item in curForm.lbxGroups.Items)
+                {
+                    ListBoxItem listBoxItem = curForm.lbxGroups.ItemContainerGenerator.ContainerFromItem(item) as ListBoxItem;
+                    if (listBoxItem != null)
+                    {
+                        CheckBox checkBox = Utils.FindVisualChild<CheckBox>(listBoxItem);
+                        if (checkBox != null && checkBox.IsChecked == true)
+                        {
+                            string stringValue = checkBox.Content.ToString();
+                            // do something with checked checkbox
+                        }
+                    }
+                }
 
 
                 // DELETE UNUSED VIEWS
