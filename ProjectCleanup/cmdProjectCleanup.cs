@@ -35,21 +35,14 @@ namespace ProjectCleanup
 
             // delete unused views in Categories: 01 - 09, elevation in 13 & views named soffit in 14
 
-            // delete unused schedules - code below works; this step is complete
-
-            // remove the Project Parameter "Code Bracing"
-
             // put any code needed for the form here
 
-            // get all the sheet groups in the Inactive category
-            // put them in a list to bind to the listbox
+            // get sheet groups in Inactive category & bind to the listbox
 
-            //List<string> inactiveGroups = Utils.GetAllSheetGroupsByCategory(doc, "Inactive");
-
-           
+            List<string> uniqueGroups = Utils.GetAllGroupsByCategory(doc, "Inactive");
 
             // open form
-            frmProjectCleanup curForm = new frmProjectCleanup()
+            frmProjectCleanup curForm = new frmProjectCleanup(uniqueGroups)
             {
                 Width = 800,
                 Height = 450,
@@ -217,14 +210,26 @@ namespace ProjectCleanup
 
         // DELETE CODE BRACING PARAMETER
 
-                FilteredElementCollector collector = new FilteredElementCollector(doc);
-                ICollection<Element> sheets = collector.OfClass(typeof(ViewSheet)).ToElements();
-
-                Parameter paramBracing = Utils.GetParameterByName(sheets, "Code Bracing");
+                string paramName = "Code Bracing";
+                IEnumerable<ParameterElement> _params = new FilteredElementCollector(doc)
+                        .WhereElementIsNotElementType()
+                        .OfClass(typeof(ParameterElement))
+                        .Cast<ParameterElement>();
+                ParameterElement projectParam = null;
+                foreach (ParameterElement pElem in _params)
+                {
+                    if (pElem.GetDefinition().Name.Equals(paramName))
+                    {
+                        projectParam = pElem;
+                        break;
+                    }
+                }
+                if (projectParam == null) 
+                    return Result.Cancelled;
 
                 if (curForm.GetCheckBoxCode() == true)
                 {
-                    doc.Delete(paramBracing.Id);
+                    doc.Delete(projectParam.Id);
                 }
 
         // DELETE THE CODE FILTER FROM SHEET NAME
@@ -264,11 +269,7 @@ namespace ProjectCleanup
             }            
 
             return Result.Succeeded;
-        }
-
-        
-
-        
+        }        
 
         public static String GetMethod()
         {

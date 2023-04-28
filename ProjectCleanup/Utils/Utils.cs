@@ -48,37 +48,62 @@ namespace ProjectCleanup
             return m_sheets;
         }
 
-        internal static List<string> GetAllSheetGroupsByCategory(Document doc, string catName)
+        internal static List<string> GetAllGroupsByCategory(Document doc, string categoryValue)
         {
-            // get all the sheets in the project
-            List<ViewSheet> m_sheetList = GetAllSheets(doc);
+            List<string> groups = new List<string>();
 
-            // create list for sheets in specified category
-            List<ViewSheet> m_returnSheets = new List<ViewSheet>();
+            // Get all sheet views in the project that have the specified category value
+            List<ViewSheet> sheets = GetAllSheetsByCategory(doc, categoryValue);
 
-            // get the value for the parameter
-            string paramName = GetParameterValueByName(ViewSheet, BuiltInParameter.ELEM_CATEGORY_PARAM);
-            
-            // create a return list
-            List<string> m_returnList = new List<string>();
-
-            // loop through the sheets and find ones in the specified category
-            foreach(ViewSheet curSheet in m_sheetList)
+            // Iterate through each sheet view and get the value of the "Group" parameter
+            foreach (ViewSheet sheet in sheets)
             {
-                if (paramName == catName)
-                    m_returnSheets.Add(curSheet);
+                // Get the "Group" parameter of the sheet view
+                Parameter groupParameter = sheet.LookupParameter("Group");
 
-                string groupName = GetParameterValueByName(ViewSheet, "Group");
+                // Check if the "Group" parameter is valid and get its value
+                if (groupParameter != null && groupParameter.Definition.Name == "Group")
+                {
+                    string groupValue = groupParameter.AsString();
 
-                // for each sheet found get the value of the group parameter
-                foreach (ViewSheet viewSheet in m_sheetList)
+                    // Check if the group value is not null or empty, and if it hasn't already been added to the list
+                    if (!string.IsNullOrEmpty(groupValue) && !groups.Contains(groupValue))
+                    {
+                        groups.Add(groupValue);
+                    }
+                }
+            }
 
-                    // add each group name to the list
-                    m_returnList.Add(groupName);                    
-            }         
+            return groups;
+        }
 
-            // return the list
-            return m_returnList.Distinct().ToList();            
+        public static List<ViewSheet> GetAllSheetsByCategory(Document doc, string categoryValue)
+        {
+            List<ViewSheet> sheets = new List<ViewSheet>();
+
+            // Get all sheets in the project
+            FilteredElementCollector sheetCollector = new FilteredElementCollector(doc);
+            ICollection<Element> sheetElements = sheetCollector.OfClass(typeof(ViewSheet)).ToElements();
+
+            // Iterate through each sheet and check if it has the specified category parameter with the value of "Inactive"
+            foreach (Element sheetElement in sheetElements)
+            {
+                ViewSheet sheet = sheetElement as ViewSheet;
+                if (sheet != null)
+                {
+                    // Get the category parameter of the sheet
+                    Parameter categoryParameter = sheet.LookupParameter("Category");
+
+                    // Check if the category parameter is valid and has the expected value
+                    if (categoryParameter != null && categoryParameter.Definition.Name == "Category" &&
+                        categoryParameter.AsValueString() == categoryValue)
+                    {
+                        sheets.Add(sheet);
+                    }
+                }
+            }
+
+            return sheets;
         }
 
         internal static List<View> GetAllViews(Document doc)
@@ -101,19 +126,22 @@ namespace ProjectCleanup
         {
             List<View> m_colViews = GetAllViews(doc);
 
-            List<View> m_returnList = new List<View>();
-
-            string viewCat = GetParameterValueByName(ViewType, "Category");
+            List<View> m_returnList = new List<View>();            
 
             foreach (View curView in m_colViews)
             {
+                string viewCat = GetParameterValueByName(curView, "Category");
 
+                if(viewCat == catName)
+                    m_returnList.Add(curView);
             }
+
+            return m_returnList;
         }
 
-        private static string GetParameterValueByName(ViewType viewType, string paramName)
+        private static string GetParameterValueByName(Element elem, string paramName)
         {
-            IList<Parameter> paramList = ViewType.GetParameters(paramName);
+            IList<Parameter> paramList = elem.GetParameters(paramName);
 
             if (paramList != null)
                 try
@@ -130,35 +158,27 @@ namespace ProjectCleanup
             return "";
         }
 
-        private static string GetParameterValueByName(ViewSheet viewType, string paramName)
-        {
-            IList<Parameter> paramList = ViewSheet.GetParameters(paramName);
-
-            if (paramList != null)
-                try
-                {
-                    Parameter param = paramList[0];
-                    string paramValue = param.AsValueString();
-                    return paramValue;
-                }
-                catch (System.ArgumentOutOfRangeException)
-                {
-                    return null;
-                }
-
-            return "";
-        }
-
+        
         internal static List<View> GetAllViewsByCategoryAndViewTemplate(Document doc, string catName, string vtName)
         {
-            List<View> m_colViews = GetAllViews(doc);
+            List<View> m_colViews = GetAllViewsByCategory(doc, catName);
 
             List<View> m_returnList = new List<View>();
 
             foreach (View curView in m_colViews)
             {
+                ElementId vtId = curView.ViewTemplateId;
 
+                if (vtId != ElementId.InvalidElementId)
+                {
+                    View vt = doc.GetElement(vtId) as View;
+
+                    if (vt.Name == vtName)
+                        m_returnList.Add(curView);
+                }               
             }
+
+            return m_returnList;
         }
 
         internal static Parameter GetParameterByName(Element element, string paramName)

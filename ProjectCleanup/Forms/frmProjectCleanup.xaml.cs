@@ -25,9 +25,11 @@ namespace ProjectCleanup
     /// </summary>
     public partial class frmProjectCleanup : Window
     {
-        List<System.Windows.Controls.CheckBox> allCheckboxes = new List<System.Windows.Controls.CheckBox>();
+        List<CheckBox> allCheckboxes = new List<CheckBox>();
 
-        public frmProjectCleanup()
+        ObservableCollection<string> groupNames { get; set; }
+
+        public frmProjectCleanup(List<string> uniqueGroups)
         {
             InitializeComponent();
 
@@ -36,6 +38,9 @@ namespace ProjectCleanup
             allCheckboxes.Add(chbSchedRename);
             allCheckboxes.Add(chbCode);
             allCheckboxes.Add(chbSheets);
+
+            groupNames = new ObservableCollection<string>(uniqueGroups);
+            this.DataContext = this;
 
             List<string> listClients = new List<string> { "Central Texas", "Dallas/Ft Worth",
                 "Florida", "Houston", "Maryland", "Minnesota", "Oklahoma", "Pennsylvania",
