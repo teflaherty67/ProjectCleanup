@@ -80,14 +80,14 @@ namespace ProjectCleanup
             {
                 t.Start("Project Cleanup");
 
-                //SET VALUE OF CLIENT NAME
+        //SET VALUE OF CLIENT NAME
 
                 if (null != clientInfo)
                 {
                     clientInfo.ClientName = nameClient;
                 }
 
-                // DELETE SELECTED GROUPS
+        // DELETE SELECTED GROUPS
 
                 foreach (var item in curForm.lbxGroups.Items)
                 {
@@ -110,8 +110,7 @@ namespace ProjectCleanup
                     }
                 }
 
-
-                // DELETE UNUSED VIEWS
+        // DELETE UNUSED VIEWS
 
                 // create a list of views to delete
                 List<View> viewsToDelete = new List<View>();
@@ -167,21 +166,15 @@ namespace ProjectCleanup
                     }
                 }
 
-                try
+                foreach (View deleteView in viewsToDelete)
                 {
-                    foreach (View deleteView in viewsToDelete)
-                    {
-                        // delete the view
-                        doc.Delete(deleteView.Id);
-                    }
-                }
-                catch (Exception)
-                {
-                    TaskDialog.Show("Error", "Could not delete view.");
+                    // delete the view
+                    doc.Delete(deleteView.Id);
                 }
 
-                // DELETE UNUSED SCHEDULES
+        // DELETE UNUSED SCHEDULES
 
+                // set some variables
                 string areaString = "";
                 string roofString = "";
 
@@ -196,15 +189,20 @@ namespace ProjectCleanup
                     roofString = "(single space)";
                 }
 
+                // get all the schedules by type
+                List<ViewSchedule> schedules = new List<ViewSchedule>();
+
                 List<ViewSchedule> areaSchedList = Utils.GetScheduleByNameContains(doc, areaString);                
 
                 List<ViewSchedule> roofSchedList = Utils.GetScheduleByNameContains(doc, roofString);
 
-                areaSchedList.AddRange(roofSchedList);
+                //combine the lists together
+                schedules.AddRange(areaSchedList);
+                schedules.AddRange(roofSchedList);
 
                 if (curForm.GetCheckBoxSchedules() == true)
                 {
-                    foreach (ViewSchedule curSchedule in areaSchedList)
+                    foreach (ViewSchedule curSchedule in schedules)
                     {
                         doc.Delete(curSchedule.Id);
                     }                    
