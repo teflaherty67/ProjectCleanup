@@ -115,8 +115,8 @@ namespace ProjectCleanup
                 }
 
 
-        // DELETE UNUSED VIEWS
-
+                // DELETE UNUSED VIEWS
+                
                 // create a list of views to delete
                 List<View> viewsToDelete = new List<View>();
 
@@ -153,26 +153,30 @@ namespace ProjectCleanup
                 // get all the sheets in the project
                 List<ViewSheet> sheetList = Utils.GetAllSheets(doc);
 
-                ElementId sheetId = sheetList.First<ViewSheet>().Id;
+                List<ViewSheet> sheetsList = sheetList.Cast<ViewSheet>().ToList();
 
-                // loop through the views
-                foreach (View curView in listViews)
+                List<View> sheetViewList = new List<View>();
+
+                foreach (ViewSheet sheet in sheetList)
                 {
-        // MODIFIED FROM MRM; DOESN'T WORK
-
-                    // check if the view is already on a sheet            
-                    if (Viewport.CanAddViewToSheet(doc, sheetId, curView.Id))
+                    foreach (ElementId viewId in sheet.GetAllPlacedViews())
                     {
-                        // check if the view has dependent views
-                        if (curView.GetDependentViewIds().Count() == 0)
+                        View view = doc.GetElement(viewId) as View;
+                        if (view != null)
                         {
-                            // add view to list of views to delete
-                            viewsToDelete.Add(curView);
+                            sheetViewList.Add(view);
                         }
                     }
                 }
 
-        // DELETE UNUSED SCHEDULES
+                List<View> nonSheetViews = listViews.Except(sheetViewList).ToList();
+
+                foreach (View view in nonSheetViews)
+                {
+                    doc.Delete(view.Id);
+                }
+
+                // DELETE UNUSED SCHEDULES
 
                 string areaString = "";
                 string roofString = "";
