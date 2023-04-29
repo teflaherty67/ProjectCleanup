@@ -245,5 +245,23 @@ namespace ProjectCleanup
             return null;
         }
 
+        internal static List<ViewSheet> GetSheetsByGroupName(Document doc, string stringValue)
+        {
+            List<ViewSheet> m_viewSheets = GetAllSheets(doc);
+
+            List<ViewSheet> m_returnGroups = new List<ViewSheet>();
+
+            foreach(ViewSheet curSheet in m_viewSheets)
+            {
+                // Get the "Group" parameter of the sheet view
+                Parameter groupParameter = curSheet.LookupParameter("Group");
+
+                // Check for the "Group" parameter and add sheet tolist
+                if (groupParameter != null && groupParameter.AsValueString() == stringValue)
+                    m_returnGroups.Add(curSheet);
+            }
+
+            return m_returnGroups;
+        }
     }
 }

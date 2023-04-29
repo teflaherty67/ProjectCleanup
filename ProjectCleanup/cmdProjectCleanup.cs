@@ -92,7 +92,7 @@ namespace ProjectCleanup
                     clientInfo.ClientName = nameClient;
                 }
 
-                // DELETE SELECTED GROUPS
+        // DELETE SELECTED GROUPS
 
                 foreach (var item in curForm.lbxGroups.Items)
                 {
@@ -104,21 +104,28 @@ namespace ProjectCleanup
                         {
                             string stringValue = checkBox.Content.ToString();
                             // do something with checked checkbox
+                            List<ViewSheet> viewSheets = Utils.GetSheetsByGroupName(doc, stringValue);
+
+                            foreach (ViewSheet curSheet in viewSheets)
+                            {
+                                doc.Delete(curSheet.Id);
+                            }
                         }
                     }
                 }
 
 
-                // DELETE UNUSED VIEWS
+        // DELETE UNUSED VIEWS
 
                 // create a list of views to delete
                 List<View> viewsToDelete = new List<View>();
 
-                // create a list opf viewsd to keep
+                // create a list opf views to keep
                 List<View> viewsToKeep = new List<View>();
 
                 // get all the views in the project by category
-                List<View> listViews = Utils.GetAllViewsByCategory(doc, "01:Floor Plans");
+                List<View> listViews = new List<View>();
+                List<View> listCat01 = Utils.GetAllViewsByCategory(doc, "01:Floor Plans");
                 List<View> listCat02 = Utils.GetAllViewsByCategory(doc, "02:Elevations");
                 List<View> listCat03 = Utils.GetAllViewsByCategory(doc, "03:Roof Plans");
                 List<View> listCat04 = Utils.GetAllViewsByCategory(doc, "04:Sections");
@@ -131,6 +138,7 @@ namespace ProjectCleanup
                 List<View> listCat14 = Utils.GetAllViewsByCategoryAndViewTemplate(doc, "14:Ceiling Views", "14-Soffit");
 
                 // combine the lists together
+                listViews.AddRange(listCat01);
                 listViews.AddRange(listCat02);
                 listViews.AddRange(listCat03);
                 listViews.AddRange(listCat04);
