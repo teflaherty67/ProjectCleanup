@@ -28,18 +28,10 @@ namespace ProjectCleanup
             UIDocument uidoc = uiapp.ActiveUIDocument;
             Application app = uiapp.Application;
             Document doc = uidoc.Document;
-
-            // delete selected groups in the Inactive Category
-
-            // adjust the View Templates to eliminate category 00 and bump current 07 and up by 1 number
-            // if view category = 01 make it 08 etc
-
-            // delete unused views in Categories: 01 - 09, elevation in 13 & views named soffit in 14
-
+            
             // put any code needed for the form here
 
-            // get sheet groups in Inactive category & bind to the listbox
-
+            // get sheet groups in Inactive category
             List<string> uniqueGroups = Utils.GetAllGroupsByCategory(doc, "Inactive");
 
             // open form
@@ -55,6 +47,7 @@ namespace ProjectCleanup
 
             // get form data and do something
 
+            // set some variables
             string txtClient = curForm.GetComboboxClient();
             string floorNum = curForm.GetComboboxFloors();
 
@@ -87,23 +80,26 @@ namespace ProjectCleanup
             {
                 t.Start("Project Cleanup");
 
+                //SET VALUE OF CLIENT NAME
+
                 if (null != clientInfo)
                 {
                     clientInfo.ClientName = nameClient;
                 }
 
-        // DELETE SELECTED GROUPS
+                // DELETE SELECTED GROUPS
 
                 foreach (var item in curForm.lbxGroups.Items)
                 {
                     ListBoxItem listBoxItem = curForm.lbxGroups.ItemContainerGenerator.ContainerFromItem(item) as ListBoxItem;
+
                     if (listBoxItem != null)
                     {
                         CheckBox checkBox = Utils.FindVisualChild<CheckBox>(listBoxItem);
                         if (checkBox != null && checkBox.IsChecked == true)
                         {
                             string stringValue = checkBox.Content.ToString();
-                            // do something with checked checkbox
+                          
                             List<ViewSheet> viewSheets = Utils.GetSheetsByGroupName(doc, stringValue);
 
                             foreach (ViewSheet curSheet in viewSheets)
@@ -115,7 +111,7 @@ namespace ProjectCleanup
                 }
 
 
-        // DELETE UNUSED VIEWS
+                // DELETE UNUSED VIEWS
 
                 // create a list of views to delete
                 List<View> viewsToDelete = new List<View>();
@@ -151,28 +147,40 @@ namespace ProjectCleanup
                 listViews.AddRange(listCat14);
 
                 // get all the sheets in the project
-                List<ViewSheet> sheetList = Utils.GetAllSheets(doc);
+                FilteredElementCollector sheetColl = new FilteredElementCollector(doc);
+                sheetColl.OfClass(typeof(ViewSheet));
 
-                ElementId sheetId = sheetList.First<ViewSheet>().Id;
-
-                // loop through the views
+                // loop through views
                 foreach (View curView in listViews)
                 {
-        // MODIFIED FROM MRM; DOESN'T WORK
-
-                    // check if the view is already on a sheet            
-                    if (Viewport.CanAddViewToSheet(doc, sheetId, curView.Id))
+                    // check if view is already on sheet
+                    if (Viewport.CanAddViewToSheet(doc, sheetColl.FirstElementId(), curView.Id))
                     {
-                        // check if the view has dependent views
+
+                        // check if view has dependent views
                         if (curView.GetDependentViewIds().Count() == 0)
                         {
-                            // add view to list of views to delete
+                            // add view to list of views to be deleted
                             viewsToDelete.Add(curView);
                         }
+
                     }
                 }
 
-        // DELETE UNUSED SCHEDULES
+                try
+                {
+                    foreach (View deleteView in viewsToDelete)
+                    {
+                        // delete the view
+                        doc.Delete(deleteView.Id);
+                    }
+                }
+                catch (Exception)
+                {
+                    TaskDialog.Show("Error", "Could not delete view.");
+                }
+
+                // DELETE UNUSED SCHEDULES
 
                 string areaString = "";
                 string roofString = "";
