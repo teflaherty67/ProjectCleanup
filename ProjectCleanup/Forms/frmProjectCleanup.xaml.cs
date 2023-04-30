@@ -38,6 +38,10 @@ namespace ProjectCleanup
             allCheckboxes.Add(chbSchedRename);
             allCheckboxes.Add(chbCode);
             allCheckboxes.Add(chbSheets);
+            allCheckboxes.Add(chbRoomTag);
+            allCheckboxes.Add(chbFamilies);
+            allCheckboxes.Add(chbLinestyles);
+            allCheckboxes.Add(chbElectrical);
 
             groupNames = new ObservableCollection<string>(uniqueGroups);
 
@@ -150,6 +154,11 @@ namespace ProjectCleanup
         {
         this.DialogResult= false;
         this.Close();
-        }        
+        }
+
+        private void btnHelp_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
