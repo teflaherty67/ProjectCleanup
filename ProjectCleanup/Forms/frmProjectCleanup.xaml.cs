@@ -128,6 +128,46 @@ namespace ProjectCleanup
             return false;
         }
 
+        internal bool GetCheckBoxRoomTag()
+        {
+            if (chbRoomTag.IsChecked == true)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        internal bool GetCheckBoxFamilies()
+        {
+            if (chbFamilies.IsChecked == true)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        internal bool GetCheckBoxLinestyles()
+        {
+            if (chbLinestyles.IsChecked == true)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        internal bool GetCheckBoxElectrical()
+        {
+            if (chbElectrical.IsChecked == true)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         private void btnAll_Click(object sender, RoutedEventArgs e)
         {
            foreach(System.Windows.Controls.CheckBox cBox in allCheckboxes)

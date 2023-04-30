@@ -32,7 +32,7 @@ namespace ProjectCleanup
             // put any code needed for the form here
 
             // get sheet groups in Inactive category
-            List<string> uniqueGroups = Utils.GetAllGroupsByCategory(doc, "Inactive");
+            List<string> uniqueGroups = Utils.GetAllSheetGroupsByCategory(doc, "Inactive");
 
             // open form
             frmProjectCleanup curForm = new frmProjectCleanup(uniqueGroups)
@@ -294,6 +294,31 @@ namespace ProjectCleanup
                         }
                     }
                 }
+
+        // UPDATE ROOM TAG AND LOAD CEILING HEIGHT PARAMETER
+
+                // update the room tag family
+                // add the ceiling height parameter
+                // set value to value of ceiling finish parameter
+                // clear value of ceiling finish parmeter
+
+        // UPDATE FAMILIES
+
+                // update shelving.rfa
+                // update rod and shelf.rfa
+                // update --kitchen counter--.rfa
+                // update EL-No Base.rfa
+                // update EL-Wall Base.rfa
+                // update Lt-No Base.rfa
+
+        // CORRECT LINESTYLES
+
+                // update the <Centerline> linestyle
+
+        // CLEAN THE EXTRA ELECTRICAL FAMILIES
+
+                // remove electrical families with numbers at the end
+                // i.e. EL-Wall Base 2
 
                 t.Commit();
             }            
