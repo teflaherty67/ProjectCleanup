@@ -240,6 +240,39 @@ namespace ProjectCleanup
                 }
             }
             return null;
+        }
+
+        public static List<Family> GetAllFamilies(Document doc)
+        {
+            List<Family> m_returnList = new List<Family>();
+
+            FilteredElementCollector collector = new FilteredElementCollector(doc);
+            collector.OfClass(typeof(Family));
+
+            foreach (Family family in collector)
+            {
+                m_returnList.Add(family);
+            }
+
+            return m_returnList;
+        }
+
+        public static List<Family> GetFamilyByNameContains(Document doc, string familyName)
+        {
+            List<Family> m_famList = GetAllFamilies(doc);
+
+            List<Family> m_returnList = new List<Family>();
+
+            //loop through family symbols in current project and look for a match
+            foreach (Family curFam in m_famList)
+            {
+                if (curFam.Name.Contains(familyName))
+                {
+                    m_returnList.Add(curFam);
+                }
+            }
+
+            return m_returnList;            
         }        
     }
 }

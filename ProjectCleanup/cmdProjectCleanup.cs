@@ -302,6 +302,11 @@ namespace ProjectCleanup
                 // set value to value of ceiling finish parameter
                 // clear value of ceiling finish parmeter
 
+                if(curForm.GetCheckBoxRoomTag() == true)
+                {
+                    
+                }
+
         // UPDATE FAMILIES
 
                 // update shelving.rfa
@@ -311,14 +316,37 @@ namespace ProjectCleanup
                 // update EL-Wall Base.rfa
                 // update Lt-No Base.rfa
 
-        // CORRECT LINESTYLES
+                if (curForm.GetCheckBoxFamilies() == true)
+                {
 
-                // update the <Centerline> linestyle
+                }
 
-        // CLEAN THE EXTRA ELECTRICAL FAMILIES
+                // CORRECT LINESTYLES
+
+                // update the <Centerline> line style line pattern to Center 1/8"
+
+                // set some variables for line style & line pattern
+
+                if (curForm.GetCheckBoxLinestyles() == true)
+                {
+
+                }
+
+                // CLEAN THE EXTRA ELECTRICAL FAMILIES
 
                 // remove electrical families with numbers at the end
                 // i.e. EL-Wall Base 2
+
+                // create lists to hold families
+
+                List<Family> listEL_Wall = Utils.GetFamilyByNameContains(doc, "EL-Wall Base");
+                List<Family> listEL_NoBase = Utils.GetFamilyByNameContains(doc, "EL-No Base");
+                List<Family> listLT_NoBase = Utils.GetFamilyByNameContains(doc, "LT-No Base");
+
+                if(curForm.GetCheckBoxElectrical()  == true)
+                {
+
+                }
 
                 t.Commit();
             }            
