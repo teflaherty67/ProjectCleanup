@@ -321,7 +321,7 @@ namespace ProjectCleanup
 
                 }
 
-                // CORRECT LINESTYLES
+        // CORRECT LINESTYLES
 
                 // update the <Centerline> line style line pattern to Center 1/8"
 
@@ -332,7 +332,7 @@ namespace ProjectCleanup
 
                 }
 
-                // CLEAN THE EXTRA ELECTRICAL FAMILIES
+        // CLEAN THE EXTRA ELECTRICAL FAMILIES
 
                 // remove electrical families with numbers at the end
                 // i.e. EL-Wall Base 2
