@@ -8,13 +8,5 @@
     <ClientId>3a45dbcf-73d7-4054-8db5-2a6501de4127</ClientId>
     <VendorId>com.YOUR COMPANY NAME</VendorId>
     <VendorDescription>YOUR COMPANY NAME, YOUR COMPANY URL</VendorDescription>
-  </AddIn>
-  <AddIn Type="Application">
-    <Name>Application ProjectCleanup</Name>
-    <Assembly>ProjectCleanup.dll</Assembly>
-    <FullClassName>ProjectCleanup.App</FullClassName>
-    <ClientId>2b7bc0ba-6f8e-4b9c-b2e8-b72b3e8f1bdc</ClientId>
-    <VendorId>com.YOUR COMPANY NAME</VendorId>
-    <VendorDescription>YOUR COMPANY NAME, YOUR COMPANY URL</VendorDescription>
-  </AddIn>
+  </AddIn>  
 </RevitAddIns>
