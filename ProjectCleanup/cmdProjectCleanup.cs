@@ -307,17 +307,33 @@ namespace ProjectCleanup
 
                 #endregion
 
-                // UPDATE ROOM TAG AND LOAD CEILING HEIGHT PARAMETER
+                #region Update Room Tag & Add Ceiling Height
 
-                // update the room tag family
-                // add the ceiling height parameter
-                // set value to value of ceiling finish parameter
-                // clear value of ceiling finish parmeter
+                // set variables
+
+                string paramClgName = "Ceiling Height";
+                string tagPath = @"S:\Shared Folders\Lifestyle USA Design\Library 2023\Annotation\Tags\Room Tag.rfa";
+
+                FamilyLoadOptions famRoomTagLoadOptions = new FamilyLoadOptions();
+
+                Family family = null;
+
 
                 if (curForm.GetCheckBoxRoomTag() == true)
                 {
+                    if (Utils.DoesProjectParamExist(doc, paramClgName))
+                    {
+                        return Result.Failed;
+                    }
+                    else
+                    {
+                        Utils.CreateSharedParam(doc, "Rooms", paramClgName, BuiltInCategory.OST_Rooms);
+                    }
 
+                    doc.LoadFamily(tagPath, famRoomTagLoadOptions, out family);
                 }
+
+                #endregion
 
                 #region Update Families               
 
@@ -335,9 +351,7 @@ namespace ProjectCleanup
                 List<string> famListLighting = new List<string> { "LT-No Base.rfa" };
                 List<string> famListShelving = new List<string> { "Rod and Shelf.rfa", "Shelving.rfa" };                
 
-                FamilyLoadOptions familyLoadOptions = new FamilyLoadOptions();
-
-                Family family = null;
+                FamilyLoadOptions familyLoadOptions = new FamilyLoadOptions();                
 
                 if (curForm.GetCheckBoxFamilies() == true)
                 {
@@ -380,7 +394,7 @@ namespace ProjectCleanup
 
                 #endregion
 
-                // CORRECT LINESTYLES
+                #region Update Line Styles
 
                 // update the <Centerline> line style line pattern to Center 1/8"
 
@@ -391,7 +405,9 @@ namespace ProjectCleanup
 
                 }
 
-                // CLEAN THE EXTRA ELECTRICAL FAMILIES
+                #endregion
+
+                #region Remove Duplicate Electrical & Lighting Families
 
                 // remove electrical families with numbers at the end
                 // i.e. EL-Wall Base 2
@@ -406,6 +422,8 @@ namespace ProjectCleanup
                 {
 
                 }
+
+                #endregion
 
                 t.Commit();
             }
