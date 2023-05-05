@@ -325,6 +325,8 @@ namespace ProjectCleanup
 
                 Family family = null;
 
+                IFamilyLoadOptions familyLoadOptions = null;
+
                 if (curForm.GetCheckBoxFamilies() == true)
                 {
                     foreach (string curFamString in famListElectrical)
