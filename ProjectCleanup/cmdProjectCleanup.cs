@@ -28,7 +28,7 @@ namespace ProjectCleanup
             UIDocument uidoc = uiapp.ActiveUIDocument;
             Application app = uiapp.Application;
             Document doc = uidoc.Document;
-            
+
             // put any code needed for the form here
 
             // get sheet groups in Inactive category
@@ -80,14 +80,14 @@ namespace ProjectCleanup
             {
                 t.Start("Project Cleanup");
 
-        //SET VALUE OF CLIENT NAME
+                //SET VALUE OF CLIENT NAME
 
                 if (null != clientInfo)
                 {
                     clientInfo.ClientName = nameClient;
                 }
 
-        // DELETE SELECTED GROUPS
+                // DELETE SELECTED GROUPS
 
                 foreach (var item in curForm.lbxGroups.Items)
                 {
@@ -99,7 +99,7 @@ namespace ProjectCleanup
                         if (checkBox != null && checkBox.IsChecked == true)
                         {
                             string stringValue = checkBox.Content.ToString();
-                          
+
                             List<ViewSheet> viewSheets = Utils.GetSheetsByGroupName(doc, stringValue);
 
                             foreach (ViewSheet curSheet in viewSheets)
@@ -110,7 +110,7 @@ namespace ProjectCleanup
                     }
                 }
 
-        // DELETE UNUSED VIEWS
+                // DELETE UNUSED VIEWS
 
                 // create a list of views to delete
                 List<View> viewsToDelete = new List<View>();
@@ -172,7 +172,7 @@ namespace ProjectCleanup
                     doc.Delete(deleteView.Id);
                 }
 
-        // DELETE UNUSED SCHEDULES
+                // DELETE UNUSED SCHEDULES
 
                 // set some variables
                 string areaString = "";
@@ -192,7 +192,7 @@ namespace ProjectCleanup
                 // get all the schedules by type
                 List<ViewSchedule> schedules = new List<ViewSchedule>();
 
-                List<ViewSchedule> areaSchedList = Utils.GetScheduleByNameContains(doc, areaString);                
+                List<ViewSchedule> areaSchedList = Utils.GetScheduleByNameContains(doc, areaString);
 
                 List<ViewSchedule> roofSchedList = Utils.GetScheduleByNameContains(doc, roofString);
 
@@ -205,17 +205,17 @@ namespace ProjectCleanup
                     foreach (ViewSchedule curSchedule in schedules)
                     {
                         doc.Delete(curSchedule.Id);
-                    }                    
+                    }
                 }
 
-        // RENAME SCHEDULES
+                // RENAME SCHEDULES
 
                 // get all the schedules
                 List<ViewSchedule> scheduleList = Utils.GetAllSchedules(doc);
-                
+
                 if (curForm.GetCheckBoxSchedRename() == true)
                 {
-                    foreach(ViewSchedule curSchedule in scheduleList)
+                    foreach (ViewSchedule curSchedule in scheduleList)
                     {
                         // create a variable for the schedule name
                         string[] inputString = curSchedule.Name.Split('-');
@@ -238,7 +238,7 @@ namespace ProjectCleanup
                     }
                 }
 
-        // DELETE CODE BRACING PARAMETER
+                // DELETE CODE BRACING PARAMETER
 
                 string paramName = "Code Bracing";
                 IEnumerable<ParameterElement> _params = new FilteredElementCollector(doc)
@@ -254,7 +254,7 @@ namespace ProjectCleanup
                         break;
                     }
                 }
-                if (projectParam == null) 
+                if (projectParam == null)
                     return Result.Cancelled;
 
                 if (curForm.GetCheckBoxCode() == true)
@@ -262,7 +262,7 @@ namespace ProjectCleanup
                     doc.Delete(projectParam.Id);
                 }
 
-        // DELETE THE CODE FILTER FROM SHEET NAME
+                // DELETE THE CODE FILTER FROM SHEET NAME
 
                 // get all the sheets
                 List<ViewSheet> activeSheets = Utils.GetAllSheets(doc);
@@ -295,37 +295,38 @@ namespace ProjectCleanup
                     }
                 }
 
-        // UPDATE ROOM TAG AND LOAD CEILING HEIGHT PARAMETER
+                // UPDATE ROOM TAG AND LOAD CEILING HEIGHT PARAMETER
 
                 // update the room tag family
                 // add the ceiling height parameter
                 // set value to value of ceiling finish parameter
                 // clear value of ceiling finish parmeter
 
-                if(curForm.GetCheckBoxRoomTag() == true)
+                if (curForm.GetCheckBoxRoomTag() == true)
                 {
-                    
+
                 }
 
-        // UPDATE FAMILIES                
+                // UPDATE FAMILIES                
 
                 // set variables for folder paths
-                
+
                 string pathElectrical = @"S:\Shared Folders\Lifestyle USA Design\Library 2023\Electrical";
                 string pathKitchen = @"S:\Shared Folders\Lifestyle USA Design\Library 2023\Kitchen";
-                string pathLighting = @"S:\Shared Folders\Lifestyle USA Design\Library 2023\Lighting";                
+                string pathLighting = @"S:\Shared Folders\Lifestyle USA Design\Library 2023\Lighting";
                 string pathShelving = @"S:\Shared Folders\Lifestyle USA Design\Library 2023\Shelf";
 
                 // create lists for families to update
 
-                List<string> famListElectrical = new List<string> { "EL-No Base.rfa", "EL-Wall Base.rfa" };               
+                List<string> famListElectrical = new List<string> { "EL-No Base.rfa", "EL-Wall Base.rfa" };
                 List<string> famListKitchen = new List<string> { "--Kitchen Counter--.rfa" };
                 List<string> famListLighting = new List<string> { "LT-No Base.rfa" };
                 List<string> famListShelving = new List<string> { "Rod and Shelf.rfa", "Shelving.rfa" };
 
                 Family family = null;
 
-                IFamilyLoadOptions familyLoadOptions = null;
+               FamilyLoadOptions familyLoadOptions = new FamilyLoadOptions();
+
 
                 if (curForm.GetCheckBoxFamilies() == true)
                 {
@@ -335,7 +336,7 @@ namespace ProjectCleanup
 
                         //load the family
 
-                        doc.LoadFamily(famPath, familyLoadOptions, out family);                        
+                        doc.LoadFamily(famPath, familyLoadOptions, out family);
                     }
 
                     foreach (string curFamString in famListKitchen)
@@ -366,7 +367,7 @@ namespace ProjectCleanup
                     }
                 }
 
-        // CORRECT LINESTYLES
+                // CORRECT LINESTYLES
 
                 // update the <Centerline> line style line pattern to Center 1/8"
 
@@ -377,7 +378,7 @@ namespace ProjectCleanup
 
                 }
 
-        // CLEAN THE EXTRA ELECTRICAL FAMILIES
+                // CLEAN THE EXTRA ELECTRICAL FAMILIES
 
                 // remove electrical families with numbers at the end
                 // i.e. EL-Wall Base 2
@@ -388,21 +389,67 @@ namespace ProjectCleanup
                 List<Family> listEL_NoBase = Utils.GetFamilyByNameContains(doc, "EL-No Base");
                 List<Family> listLT_NoBase = Utils.GetFamilyByNameContains(doc, "LT-No Base");
 
-                if(curForm.GetCheckBoxElectrical()  == true)
+                if (curForm.GetCheckBoxElectrical() == true)
                 {
 
                 }
 
                 t.Commit();
-            }            
+            }
 
             return Result.Succeeded;
-        }        
+        }
 
         public static String GetMethod()
         {
             var method = MethodBase.GetCurrentMethod().DeclaringType?.FullName;
             return method;
         }
+
+        public class FamilyLoadOptions : IFamilyLoadOptions
+        {
+            #region IFamilyLoadOptions Members
+
+            public bool OnFamilyFound(bool familyInUse, out bool overwriteParameterValues)
+            {
+                if (!familyInUse)
+                {
+                    TaskDialog.Show("SampleFamilyLoadOptions", "The family has not been in use and will keep loading.");
+
+                    overwriteParameterValues = true;
+                    return true;
+                }
+                else
+                {
+                    TaskDialog.Show("SampleFamilyLoadOptions", "The family has been in use but will still be loaded with existing parameters overwritten.");
+
+                    overwriteParameterValues = true;
+                    return true;
+                }
+            }
+
+            public bool OnSharedFamilyFound(Family sharedFamily, bool familyInUse, out FamilySource source, out bool overwriteParameterValues)
+            {
+                if (!familyInUse)
+                {
+                    TaskDialog.Show("SampleFamilyLoadOptions", "The shared family has not been in use and will keep loading.");
+
+                    source = FamilySource.Family;
+                    overwriteParameterValues = true;
+                    return true;
+                }
+                else
+                {
+                    TaskDialog.Show("SampleFamilyLoadOptions", "The shared family has been in use but will still be loaded from the FamilySource with existing parameters overwritten.");
+
+                    source = FamilySource.Family;
+                    overwriteParameterValues = true;
+                    return true;
+                }
+            }
+
+            #endregion
+        }
     }
+
 }

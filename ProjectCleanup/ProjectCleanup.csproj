@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ButtonDataClass.cs" />
+    <Compile Include="Classes\clsFamilyLoadOptions.cs" />
     <Compile Include="cmdProjectCleanup.cs" />
     <Compile Include="Forms\frmProjectCleanup.xaml.cs">
       <DependentUpon>frmProjectCleanup.xaml</DependentUpon>
