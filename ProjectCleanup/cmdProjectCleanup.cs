@@ -87,7 +87,7 @@ namespace ProjectCleanup
                     clientInfo.ClientName = nameClient;
                 }
 
-                // DELETE SELECTED GROUPS
+                #region Delete Sheet Groups
 
                 foreach (var item in curForm.lbxGroups.Items)
                 {
@@ -110,7 +110,9 @@ namespace ProjectCleanup
                     }
                 }
 
-                // DELETE UNUSED VIEWS
+                #endregion
+
+                #region Delete Unused Views
 
                 // create a list of views to delete
                 List<View> viewsToDelete = new List<View>();
@@ -172,7 +174,9 @@ namespace ProjectCleanup
                     doc.Delete(deleteView.Id);
                 }
 
-                // DELETE UNUSED SCHEDULES
+                #endregion
+
+                #region Delete Unused Schedules
 
                 // set some variables
                 string areaString = "";
@@ -208,7 +212,9 @@ namespace ProjectCleanup
                     }
                 }
 
-                // RENAME SCHEDULES
+                #endregion
+
+                #region Rename Schedules
 
                 // get all the schedules
                 List<ViewSchedule> scheduleList = Utils.GetAllSchedules(doc);
@@ -238,7 +244,9 @@ namespace ProjectCleanup
                     }
                 }
 
-                // DELETE CODE BRACING PARAMETER
+                #endregion
+
+                #region Delete Code Bracing Parameter
 
                 string paramName = "Code Bracing";
                 IEnumerable<ParameterElement> _params = new FilteredElementCollector(doc)
@@ -262,7 +270,9 @@ namespace ProjectCleanup
                     doc.Delete(projectParam.Id);
                 }
 
-                // DELETE THE CODE FILTER FROM SHEET NAME
+                #endregion
+
+                #region Remove Code Filter From Sheet Name
 
                 // get all the sheets
                 List<ViewSheet> activeSheets = Utils.GetAllSheets(doc);
@@ -294,6 +304,8 @@ namespace ProjectCleanup
                         }
                     }
                 }
+
+                #endregion
 
                 // UPDATE ROOM TAG AND LOAD CEILING HEIGHT PARAMETER
 
