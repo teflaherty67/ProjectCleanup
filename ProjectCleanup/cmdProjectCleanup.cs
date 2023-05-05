@@ -307,18 +307,61 @@ namespace ProjectCleanup
                     
                 }
 
-        // UPDATE FAMILIES
+        // UPDATE FAMILIES                
 
-                // update shelving.rfa
-                // update rod and shelf.rfa
-                // update --kitchen counter--.rfa
-                // update EL-No Base.rfa
-                // update EL-Wall Base.rfa
-                // update Lt-No Base.rfa
+                // set variables for folder paths
+                
+                string pathElectrical = @"S:\Shared Folders\Lifestyle USA Design\Library 2023\Electrical";
+                string pathKitchen = @"S:\Shared Folders\Lifestyle USA Design\Library 2023\Kitchen";
+                string pathLighting = @"S:\Shared Folders\Lifestyle USA Design\Library 2023\Lighting";                
+                string pathShelving = @"S:\Shared Folders\Lifestyle USA Design\Library 2023\Shelf";
+
+                // create lists for families to update
+
+                List<string> famListElectrical = new List<string> { "EL-No Base.rfa", "EL-Wall Base.rfa" };               
+                List<string> famListKitchen = new List<string> { "--Kitchen Counter--.rfa" };
+                List<string> famListLighting = new List<string> { "LT-No Base.rfa" };
+                List<string> famListShelving = new List<string> { "Rod and Shelf.rfa", "Shelving.rfa" };
+
+                Family family = null;
 
                 if (curForm.GetCheckBoxFamilies() == true)
                 {
+                    foreach (string curFamString in famListElectrical)
+                    {
+                        string famPath = (pathElectrical + @"\" + curFamString);
 
+                        //load the family
+
+                        doc.LoadFamily(famPath, familyLoadOptions, out family);                        
+                    }
+
+                    foreach (string curFamString in famListKitchen)
+                    {
+                        string famPath = (pathKitchen + @"\" + curFamString);
+
+                        // load the family
+
+                        doc.LoadFamily(famPath, familyLoadOptions, out family);
+                    }
+
+                    foreach (string curFamString in famListLighting)
+                    {
+                        string famPath = (pathLighting + @"\" + curFamString);
+
+                        // load the family
+
+                        doc.LoadFamily(famPath, familyLoadOptions, out family);
+                    }
+
+                    foreach (string curFamString in famListShelving)
+                    {
+                        string famPath = (pathShelving + @"\" + curFamString);
+
+                        // load the family
+
+                        doc.LoadFamily(famPath, familyLoadOptions, out family);
+                    }
                 }
 
         // CORRECT LINESTYLES
