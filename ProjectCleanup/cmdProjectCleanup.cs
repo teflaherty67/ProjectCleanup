@@ -307,7 +307,7 @@ namespace ProjectCleanup
 
                 }
 
-                // UPDATE FAMILIES                
+                #region Update Families               
 
                 // set variables for folder paths
 
@@ -321,12 +321,11 @@ namespace ProjectCleanup
                 List<string> famListElectrical = new List<string> { "EL-No Base.rfa", "EL-Wall Base.rfa" };
                 List<string> famListKitchen = new List<string> { "--Kitchen Counter--.rfa" };
                 List<string> famListLighting = new List<string> { "LT-No Base.rfa" };
-                List<string> famListShelving = new List<string> { "Rod and Shelf.rfa", "Shelving.rfa" };
+                List<string> famListShelving = new List<string> { "Rod and Shelf.rfa", "Shelving.rfa" };                
+
+                FamilyLoadOptions familyLoadOptions = new FamilyLoadOptions();
 
                 Family family = null;
-
-               FamilyLoadOptions familyLoadOptions = new FamilyLoadOptions();
-
 
                 if (curForm.GetCheckBoxFamilies() == true)
                 {
@@ -366,6 +365,8 @@ namespace ProjectCleanup
                         doc.LoadFamily(famPath, familyLoadOptions, out family);
                     }
                 }
+
+                #endregion
 
                 // CORRECT LINESTYLES
 
