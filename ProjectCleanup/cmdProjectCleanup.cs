@@ -151,28 +151,31 @@ namespace ProjectCleanup
                 FilteredElementCollector sheetColl = new FilteredElementCollector(doc);
                 sheetColl.OfClass(typeof(ViewSheet));
 
-                // loop through views
-                foreach (View curView in listViews)
+                if (curForm.GetCheckBoxViews() == true )
                 {
-                    // check if view is already on sheet
-                    if (Viewport.CanAddViewToSheet(doc, sheetColl.FirstElementId(), curView.Id))
+                    // loop through views
+                    foreach (View curView in listViews)
                     {
-
-                        // check if view has dependent views
-                        if (curView.GetDependentViewIds().Count() == 0)
+                        // check if view is already on sheet
+                        if (Viewport.CanAddViewToSheet(doc, sheetColl.FirstElementId(), curView.Id))
                         {
-                            // add view to list of views to be deleted
-                            viewsToDelete.Add(curView);
+
+                            // check if view has dependent views
+                            if (curView.GetDependentViewIds().Count() == 0)
+                            {
+                                // add view to list of views to be deleted
+                                viewsToDelete.Add(curView);
+                            }
+
                         }
-
                     }
-                }
 
-                foreach (View deleteView in viewsToDelete)
-                {
-                    // delete the view
-                    doc.Delete(deleteView.Id);
-                }
+                    foreach (View deleteView in viewsToDelete)
+                    {
+                        // delete the view
+                        doc.Delete(deleteView.Id);
+                    }
+                }               
 
                 #endregion
 
@@ -211,7 +214,7 @@ namespace ProjectCleanup
                         doc.Delete(curSchedule.Id);
                     }
                 }
-
+                
                 #endregion
 
                 #region Rename Schedules
