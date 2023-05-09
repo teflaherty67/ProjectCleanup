@@ -228,22 +228,26 @@ namespace ProjectCleanup
                     {
                         // create a variable for the schedule name
                         string[] inputString = curSchedule.Name.Split('-');
-                        string curElev = inputString[1][0].ToString();
-
-                        string replaceString = "Elevation " + curElev;
-
-                        string originalString = curSchedule.Name;
-
-                        // check if first character after hypen is "E"
-                        if (curElev != "E")
+                        if(inputString.Length >1) 
                         {
-                            string[] splitString = curSchedule.Name.Split('-');
-                            splitString[1] = replaceString;
+                            string curElev = inputString[1].Trim()[0].ToString();
 
-                            string newString = string.Join("-", splitString);
-                        }
-                        else
-                            continue;
+                            string replaceString = "Elevation " + curElev;
+
+                            string originalString = curSchedule.Name;
+
+                            // check if first character after hypen is "E"
+                            if (curElev != "E")
+                            {
+                                string[] splitString = curSchedule.Name.Split('-');
+                                
+                                string newString = splitString[0] + "- " + replaceString;
+
+                                curSchedule.Name = newString;
+                            }
+                            else
+                                continue;
+                        }                        
                     }
                 }
 
