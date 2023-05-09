@@ -207,6 +207,8 @@ namespace ProjectCleanup
                 schedules.AddRange(areaSchedList);
                 schedules.AddRange(roofSchedList);
 
+
+
                 if (curForm.GetCheckBoxSchedules() == true)
                 {
                     foreach (ViewSchedule curSchedule in schedules)
