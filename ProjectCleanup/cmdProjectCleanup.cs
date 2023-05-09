@@ -37,8 +37,8 @@ namespace ProjectCleanup
             // open form
             frmProjectCleanup curForm = new frmProjectCleanup(uniqueGroups)
             {
-                Width = 800,
-                Height = 450,
+                Width = 400,
+                Height = 650,
                 WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen,
                 Topmost = true,
             };
@@ -326,7 +326,7 @@ namespace ProjectCleanup
                 {
                     if (Utils.DoesProjectParamExist(doc, paramClgName))
                     {
-                        return Result.Failed;
+                        return Result.Cancelled;
                     }
                     else
                     {
@@ -448,14 +448,14 @@ namespace ProjectCleanup
             {
                 if (!familyInUse)
                 {
-                    TaskDialog.Show("SampleFamilyLoadOptions", "The family has not been in use and will keep loading.");
+                    // TaskDialog.Show("SampleFamilyLoadOptions", "The family has not been in use and will keep loading.");
 
                     overwriteParameterValues = true;
                     return true;
                 }
                 else
                 {
-                    TaskDialog.Show("SampleFamilyLoadOptions", "The family has been in use but will still be loaded with existing parameters overwritten.");
+                    // TaskDialog.Show("SampleFamilyLoadOptions", "The family has been in use but will still be loaded with existing parameters overwritten.");
 
                     overwriteParameterValues = true;
                     return true;
@@ -466,7 +466,7 @@ namespace ProjectCleanup
             {
                 if (!familyInUse)
                 {
-                    TaskDialog.Show("SampleFamilyLoadOptions", "The shared family has not been in use and will keep loading.");
+                    // TaskDialog.Show("SampleFamilyLoadOptions", "The shared family has not been in use and will keep loading.");
 
                     source = FamilySource.Family;
                     overwriteParameterValues = true;
@@ -474,7 +474,7 @@ namespace ProjectCleanup
                 }
                 else
                 {
-                    TaskDialog.Show("SampleFamilyLoadOptions", "The shared family has been in use but will still be loaded from the FamilySource with existing parameters overwritten.");
+                    // TaskDialog.Show("SampleFamilyLoadOptions", "The shared family has been in use but will still be loaded from the FamilySource with existing parameters overwritten.");
 
                     source = FamilySource.Family;
                     overwriteParameterValues = true;

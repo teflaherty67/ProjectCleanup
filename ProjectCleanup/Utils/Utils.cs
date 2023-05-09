@@ -87,10 +87,10 @@ namespace ProjectCleanup
 
             return "";
         }
-        
-        public static List<ParameterData> GetAllProjectParameters(Document doc)
+
+        public static List<ParameterData> GetAllProjectParameters(Document curDoc)
         {
-            if (doc.IsFamilyDocument)
+            if (curDoc.IsFamilyDocument)
             {
                 TaskDialog.Show("Error", "Cannot be a family document.");
                 return null;
@@ -98,7 +98,7 @@ namespace ProjectCleanup
 
             List<ParameterData> paraList = new List<ParameterData>();
 
-            BindingMap map = doc.ParameterBindings;
+            BindingMap map = curDoc.ParameterBindings;
             DefinitionBindingMapIterator iter = map.ForwardIterator();
             iter.Reset();
             while (iter.MoveNext())
@@ -113,19 +113,18 @@ namespace ProjectCleanup
             return paraList;
         }
 
-        internal static bool DoesProjectParamExist(Document doc, string paramName)
+        public static bool DoesProjectParamExist(Document curDoc, string pName)
         {
-            List<ParameterData> pdList = GetAllProjectParameters(doc);
+            List<ParameterData> pdList = GetAllProjectParameters(curDoc);
             foreach (ParameterData pd in pdList)
             {
-                if (pd.name == paramName)
+                if (pd.name == pName)
                 {
                     return true;
                 }
             }
             return false;
         }
-
         public static void CreateSharedParam(Document curDoc, string groupName, string paramName, BuiltInCategory cat)
         {
             Definition curDef = null;
@@ -146,6 +145,10 @@ namespace ProjectCleanup
                 //create param
                 curDef = AddParamToFile(defFile, groupName, paramName);
             }
+            else
+            {
+                curDef = GetParameterDefinitionFromFile(defFile, groupName, paramName);
+            }
 
             //check if param is added to views - if not then add
             if (ParamAddedToFile(curDoc, paramName) == false)
@@ -153,6 +156,24 @@ namespace ProjectCleanup
                 //add parameter to current Revitfile
                 AddParamToDocument(curDoc, curDef, cat);
             }
+        }
+
+        private static Definition GetParameterDefinitionFromFile(DefinitionFile defFile, string groupName, string paramName)
+        {
+            // iterate the Definition groups of this file
+            foreach (DefinitionGroup group in defFile.Groups)
+            {
+                if (group.Name == groupName)
+                {
+                    // iterate the difinitions
+                    foreach (Definition definition in group.Definitions)
+                    {
+                        if (definition.Name == paramName)
+                            return definition;
+                    }
+                }
+            }
+            return null;
         }
 
         //check if specified parameter is already added to Revit file
@@ -181,21 +202,12 @@ namespace ProjectCleanup
             //create binding
             ElementBinding curBinding = curDoc.Application.Create.NewInstanceBinding(myCatSet);
 
-            //insert definition into binding
-            using (Transaction curTrans = new Transaction(curDoc, "Added Shared Parameter"))
-            {
-                if (curTrans.Start() == TransactionStatus.Started)
-                {
-                    //do something
-                    paramAdded = curDoc.ParameterBindings.Insert(curDef, curBinding, BuiltInParameterGroup.PG_IDENTITY_DATA);
-                }
-
-                //commit changes
-                curTrans.Commit();
-            }
-
+            //do something
+            paramAdded = curDoc.ParameterBindings.Insert(curDef, curBinding, BuiltInParameterGroup.PG_IDENTITY_DATA);
+            
             return paramAdded;
         }
+
 
         //check if specified parameter exists in shared parameter file
         public static bool ParamExists(DefinitionGroups groupList, string groupName, string paramName)
@@ -239,6 +251,20 @@ namespace ProjectCleanup
             Definition newParam = defGroup.Definitions.Create(curOptions);
 
             return newParam;
+        }
+
+        public static DefinitionGroup GetDefinitionGroup(DefinitionFile defFile, string groupName)
+        {
+            //loop through groups and look for match
+            foreach (DefinitionGroup curGroup in defFile.Groups)
+            {
+                if (curGroup.Name.Equals(groupName))
+                {
+                    return curGroup;
+                }
+            }
+
+            return null;
         }
 
         #endregion
@@ -451,20 +477,6 @@ namespace ProjectCleanup
                 }
             }
             return null;
-        }
-        
-        public static DefinitionGroup GetDefinitionGroup(DefinitionFile defFile, string groupName)
-        {
-            //loop through groups and look for match
-            foreach (DefinitionGroup curGroup in defFile.Groups)
-            {
-                if (curGroup.Name.Equals(groupName))
-                {
-                    return curGroup;
-                }
-            }
-
-            return null;
-        }
+        }        
     }
 }
