@@ -219,11 +219,6 @@ namespace ProjectCleanup
 
                 #region Rename Schedules
 
-                // split the schedule name on the space after the last title word
-                // if the first letter after the space is  "E" do nothing
-                // if not get the first character that is a letter and set it = to curElev
-                // and replace the string after the space with "Elevation " + curElev
-
                 // create lists for schedules by name contains
                 List<ViewSchedule> veneerList = Utils.GetScheduleByNameContains(doc, "Exterior Veneer Calculations");
                 List<ViewSchedule> floorList = Utils.GetScheduleByNameContains(doc, "Floor Areas");
@@ -232,33 +227,43 @@ namespace ProjectCleanup
                 List<ViewSchedule> equipmentList = Utils.GetScheduleByNameContains(doc, "Roof Ventilation Equipment");
                 List<ViewSchedule> indexList = Utils.GetScheduleByNameContains(doc, "Sheet Index");
 
+                // create a counter for the schedules that will be renamed
                 int countRenamed = 0;
+
+                // create a counter for the schedules that will not be renamed
                 int countEdit = 0;
                                 
                 if (curForm.GetCheckBoxSchedRename() == true)
                 {
                     foreach (ViewSchedule curSchedule in veneerList)
                     {
+                        // get the current name                        
                         string originalString = curSchedule.Name;
 
+                        // split the name after the last word in the title
                         string schedTitle = originalString.Substring(0, 28);
                         string schedElev = originalString.Substring(29);
 
+                        // get the index of the first character in the second string that is a letter
                         int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
 
+                        // set the value of curElev to that letter
                         string curElev = schedElev.Substring(elevIndex, 1);
 
+                        // if the letter doesn't equal "E"
                         if (curElev != "E")
                         {
                             try
                             {
-                                // replace schedElev with "- Elevation " + curElev
+                                // try to replace schedElev with "- Elevation " + curElev
                                 curSchedule.Name = schedTitle + " - Elevation " + curElev;
 
+                                // if successful, increment the renamed count by 1
                                 countRenamed++;
                             }
                             catch (Exception)
                             {
+                                // if unsuccessful, increment the edit count by 1
                                 countEdit++;
                             }
                         }
@@ -266,26 +271,33 @@ namespace ProjectCleanup
 
                     foreach (ViewSchedule curSchedule in floorList)
                     {
+                        // get the current name
                         string originalString = curSchedule.Name;
 
+                        // split the name after the last word in the title
                         string schedTitle = originalString.Substring(0, 11);
                         string schedElev = originalString.Substring(12);
 
+                        // get the index of the first character in the second string that is a letter
                         int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
 
+                        // set the value of curElev to that letter
                         string curElev = schedElev.Substring(elevIndex, 1);
 
+                        // if the letter doesn't equal "E"
                         if (curElev != "E")
                         {
                             try
                             {
-                                // replace schedElev with "- Elevation " + curElev
+                                // try to replace schedElev with "- Elevation " + curElev
                                 curSchedule.Name = schedTitle + " - Elevation " + curElev;
 
+                                // if successful, increment the renamed count by 1
                                 countRenamed++;
                             }
                             catch (Exception)
                             {
+                                // if unsuccessful, increment the edit count by 1
                                 countEdit++;
                             }
                         }
@@ -293,26 +305,33 @@ namespace ProjectCleanup
 
                     foreach (ViewSchedule curSchedule in frameList)
                     {
+                        // get the current name 
                         string originalString = curSchedule.Name;
 
+                        // split the name after the last word in the title
                         string schedTitle = originalString.Substring(0, 10);
                         string schedElev = originalString.Substring(11);
 
+                        // get the index of the first character in the second string that is a letter
                         int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
 
+                        // set the value of curElev to that letter
                         string curElev = schedElev.Substring(elevIndex, 1);
 
+                        // if the letter doesn't equal "E"
                         if (curElev != "E")
                         {
                             try
                             {
-                                // replace schedElev with "- Elevation " + curElev
+                                // try to replace schedElev with "- Elevation " + curElev
                                 curSchedule.Name = schedTitle + " - Elevation " + curElev;
 
+                                // if successful, increment the renamed count by 1
                                 countRenamed++;
                             }
                             catch (Exception)
                             {
+                                // if unsuccessful, increment the edit count by 1
                                 countEdit++;
                             }
                         }
@@ -320,26 +339,33 @@ namespace ProjectCleanup
 
                     foreach (ViewSchedule curSchedule in atticList)
                     {
+                        // get the current name 
                         string originalString = curSchedule.Name;
 
+                        // split the name after the last word in the title
                         string schedTitle = originalString.Substring(0, 29);
                         string schedElev = originalString.Substring(30);
 
+                        // get the index of the first character in the second string that is a letter
                         int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
 
+                        // set the value of curElev to that letter
                         string curElev = schedElev.Substring(elevIndex, 1);
 
+                        // if the letter doesn't equal "E"
                         if (curElev != "E")
                         {
                             try
                             {
-                                // replace schedElev with "- Elevation " + curElev
+                                // try to replace schedElev with "- Elevation " + curElev
                                 curSchedule.Name = schedTitle + " - Elevation " + curElev;
 
+                                // if successful, increment the renamed count by 1
                                 countRenamed++;
                             }
                             catch (Exception)
                             {
+                                // if unsuccessful, increment the edit count by 1
                                 countEdit++;
                             }
                         }
@@ -347,26 +373,33 @@ namespace ProjectCleanup
 
                     foreach (ViewSchedule curSchedule in equipmentList)
                     {
+                        // get the current name 
                         string originalString = curSchedule.Name;
 
+                        // split the name after the last word in the title
                         string schedTitle = originalString.Substring(0, 27);
                         string schedElev = originalString.Substring(28);
 
+                        // get the index of the first character in the second string that is a letter
                         int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
 
+                        // set the value of curElev to that letter
                         string curElev = schedElev.Substring(elevIndex, 1);
 
+                        // if the letter doesn't equal "E"
                         if (curElev != "E")
                         {
                             try
                             {
-                                // replace schedElev with "- Elevation " + curElev
+                                // try to replace schedElev with "- Elevation " + curElev
                                 curSchedule.Name = schedTitle + " - Elevation " + curElev;
 
+                                // if successful, increment the renamed count by 1
                                 countRenamed++;
                             }
                             catch (Exception)
                             {
+                                // if unsuccessful, increment the edit count by 1
                                 countEdit++;
                             }
                         }
@@ -374,33 +407,37 @@ namespace ProjectCleanup
 
                     foreach (ViewSchedule curSchedule in indexList)
                     {
+                        // get the current name 
                         string originalString = curSchedule.Name;
 
+                        // split the name after the last word in the title
                         string schedTitle = originalString.Substring(0, 11);
                         string schedElev = originalString.Substring(12);
 
+                        // get the index of the first character in the second string that is a letter
                         int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
 
+                        // set the value of curElev to that letter
                         string curElev = schedElev.Substring(elevIndex, 1);
 
+                        // if the letter doesn't equal "E"
                         if (curElev != "E")
                         {
                             try
                             {
-                                // replace schedElev with "- Elevation " + curElev
+                                // try to replace schedElev with "- Elevation " + curElev
                                 curSchedule.Name = schedTitle + " - Elevation " + curElev;
 
+                                // if successful, increment the renamed count by 1
                                 countRenamed++;
                             }
                             catch (Exception)
                             {
+                                // if unsuccessful, increment the edit count by 1
                                 countEdit++;
                             }
                         }
-                    }
-
-                    TaskDialog.Show("Complete", countRenamed.ToString() + " schedules will be renamed. "
-                        + countEdit.ToString() + " schedules would have duplicate names & can not be renamed.");
+                    }                   
                 }
 
                 #endregion
@@ -583,6 +620,9 @@ namespace ProjectCleanup
                 }
 
                 #endregion
+
+                // TaskDialog.Show("Complete", countRenamed.ToString() + " schedules will be renamed. "
+                       // + countEdit.ToString() + " schedules would have duplicate names & can not be renamed.");
 
                 t.Commit();
             }
