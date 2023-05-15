@@ -452,5 +452,17 @@ namespace ProjectCleanup
 
             return null;
         }
+
+        internal static int GetIndexOfFirstLetter(string schedTitle)
+        {
+            var index = 0;
+            foreach (var c in schedTitle)
+                if (char.IsLetter(c))
+                    return index;
+                else
+                    index++;
+
+            return schedTitle.Length;
+        }
     }
 }

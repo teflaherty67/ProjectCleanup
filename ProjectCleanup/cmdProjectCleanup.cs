@@ -214,37 +214,193 @@ namespace ProjectCleanup
                         doc.Delete(curSchedule.Id);
                     }
                 }
-                
+
                 #endregion
 
                 #region Rename Schedules
 
-                // get all the schedules
-                List<ViewSchedule> scheduleList = Utils.GetAllSchedules(doc);
+                // split the schedule name on the space after the last title word
+                // if the first letter after the space is  "E" do nothing
+                // if not get the first character that is a letter and set it = to curElev
+                // and replace the string after the space with "Elevation " + curElev
 
+                // create lists for schedules by name contains
+                List<ViewSchedule> veneerList = Utils.GetScheduleByNameContains(doc, "Exterior Veneer Calculations");
+                List<ViewSchedule> floorList = Utils.GetScheduleByNameContains(doc, "Floor Areas");
+                List<ViewSchedule> frameList = Utils.GetScheduleByNameContains(doc, "Frame Areas");
+                List<ViewSchedule> atticList = Utils.GetScheduleByNameContains(doc, "Roof Ventilation Calculations");
+                List<ViewSchedule> equipmentList = Utils.GetScheduleByNameContains(doc, "Roof Ventilation Equipment");
+                List<ViewSchedule> indexList = Utils.GetScheduleByNameContains(doc, "Sheet Index");
+
+                int countRenamed = 0;
+                int countEdit = 0;
+                                
                 if (curForm.GetCheckBoxSchedRename() == true)
                 {
-                    foreach (ViewSchedule curSchedule in scheduleList)
+                    foreach (ViewSchedule curSchedule in veneerList)
                     {
-                        // create a variable for the schedule name
-                        string[] inputString = curSchedule.Name.Split('-');
-                        string curElev = inputString[1][0].ToString();
-
-                        string replaceString = "Elevation " + curElev;
-
                         string originalString = curSchedule.Name;
 
-                        // check if first character after hypen is "E"
+                        string schedTitle = originalString.Substring(0, 28);
+                        string schedElev = originalString.Substring(29);
+
+                        int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
+
+                        string curElev = schedElev.Substring(elevIndex, 1);
+
                         if (curElev != "E")
                         {
-                            string[] splitString = curSchedule.Name.Split('-');
-                            splitString[1] = replaceString;
+                            try
+                            {
+                                // replace schedElev with "- Elevation " + curElev
+                                curSchedule.Name = schedTitle + " - Elevation " + curElev;
 
-                            string newString = string.Join("-", splitString);
+                                countRenamed++;
+                            }
+                            catch (Exception)
+                            {
+                                countEdit++;
+                            }
                         }
-                        else
-                            continue;
                     }
+
+                    foreach (ViewSchedule curSchedule in floorList)
+                    {
+                        string originalString = curSchedule.Name;
+
+                        string schedTitle = originalString.Substring(0, 11);
+                        string schedElev = originalString.Substring(12);
+
+                        int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
+
+                        string curElev = schedElev.Substring(elevIndex, 1);
+
+                        if (curElev != "E")
+                        {
+                            try
+                            {
+                                // replace schedElev with "- Elevation " + curElev
+                                curSchedule.Name = schedTitle + " - Elevation " + curElev;
+
+                                countRenamed++;
+                            }
+                            catch (Exception)
+                            {
+                                countEdit++;
+                            }
+                        }
+                    }
+
+                    foreach (ViewSchedule curSchedule in frameList)
+                    {
+                        string originalString = curSchedule.Name;
+
+                        string schedTitle = originalString.Substring(0, 10);
+                        string schedElev = originalString.Substring(11);
+
+                        int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
+
+                        string curElev = schedElev.Substring(elevIndex, 1);
+
+                        if (curElev != "E")
+                        {
+                            try
+                            {
+                                // replace schedElev with "- Elevation " + curElev
+                                curSchedule.Name = schedTitle + " - Elevation " + curElev;
+
+                                countRenamed++;
+                            }
+                            catch (Exception)
+                            {
+                                countEdit++;
+                            }
+                        }
+                    }
+
+                    foreach (ViewSchedule curSchedule in atticList)
+                    {
+                        string originalString = curSchedule.Name;
+
+                        string schedTitle = originalString.Substring(0, 29);
+                        string schedElev = originalString.Substring(30);
+
+                        int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
+
+                        string curElev = schedElev.Substring(elevIndex, 1);
+
+                        if (curElev != "E")
+                        {
+                            try
+                            {
+                                // replace schedElev with "- Elevation " + curElev
+                                curSchedule.Name = schedTitle + " - Elevation " + curElev;
+
+                                countRenamed++;
+                            }
+                            catch (Exception)
+                            {
+                                countEdit++;
+                            }
+                        }
+                    }
+
+                    foreach (ViewSchedule curSchedule in equipmentList)
+                    {
+                        string originalString = curSchedule.Name;
+
+                        string schedTitle = originalString.Substring(0, 27);
+                        string schedElev = originalString.Substring(28);
+
+                        int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
+
+                        string curElev = schedElev.Substring(elevIndex, 1);
+
+                        if (curElev != "E")
+                        {
+                            try
+                            {
+                                // replace schedElev with "- Elevation " + curElev
+                                curSchedule.Name = schedTitle + " - Elevation " + curElev;
+
+                                countRenamed++;
+                            }
+                            catch (Exception)
+                            {
+                                countEdit++;
+                            }
+                        }
+                    }
+
+                    foreach (ViewSchedule curSchedule in indexList)
+                    {
+                        string originalString = curSchedule.Name;
+
+                        string schedTitle = originalString.Substring(0, 11);
+                        string schedElev = originalString.Substring(12);
+
+                        int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
+
+                        string curElev = schedElev.Substring(elevIndex, 1);
+
+                        if (curElev != "E")
+                        {
+                            try
+                            {
+                                // replace schedElev with "- Elevation " + curElev
+                                curSchedule.Name = schedTitle + " - Elevation " + curElev;
+
+                                countRenamed++;
+                            }
+                            catch (Exception)
+                            {
+                                countEdit++;
+                            }
+                        }
+                    }
+
+                    TaskDialog.Show("Complete", countRenamed.ToString() + " schedules will be renamed. "
+                        + countEdit.ToString() + " schedules would have duplicate names & can not be renamed.");
                 }
 
                 #endregion
