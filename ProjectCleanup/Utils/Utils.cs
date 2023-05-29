@@ -464,5 +464,35 @@ namespace ProjectCleanup
 
             return schedTitle.Length;
         }
+
+        #region Lines
+
+        internal static LinePatternElement GetLinePatternByName(Document curDoc, string typeName)
+        {
+            if (typeName != null)
+                return LinePatternElement.GetLinePatternElementByName(curDoc, typeName);
+            else
+                return null;
+        }
+
+        internal static GraphicsStyle GetLinestyleByName(Document curDoc, string styleName)
+        {
+            GraphicsStyle retlinestyle = null;
+
+            FilteredElementCollector gstylescollector = new FilteredElementCollector(curDoc);
+            gstylescollector.OfClass(typeof(GraphicsStyle));
+
+            foreach (Element element in gstylescollector)
+            {
+                GraphicsStyle curLS = element as GraphicsStyle;
+
+                if (curLS.Name == styleName)
+                    retlinestyle = curLS;
+            }
+
+            return retlinestyle;
+        }
+
+        #endregion
     }
 }

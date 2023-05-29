@@ -592,13 +592,16 @@ namespace ProjectCleanup
 
                 #region Update Line Styles
 
-                // update the <Centerline> line style line pattern to Center 1/8"
+                // get the line style called <Centerline>
+                GraphicsStyle curCenterline = Utils.GetLinestyleByName(doc, "<Centerline>");
 
-                // set some variables for line style & line pattern
+                // get the line pattern called: Center 1/8"
+                LinePatternElement newCenterLP = Utils.GetLinePatternByName(doc, "Center 1/8\"");
 
                 if (curForm.GetCheckBoxLinestyles() == true)
                 {
-
+                    curCenterline.GraphicsStyleCategory.SetLinePatternId(newCenterLP.Id,
+                        GraphicsStyleType.Projection);
                 }
 
                 #endregion
