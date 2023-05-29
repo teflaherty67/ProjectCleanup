@@ -510,7 +510,7 @@ namespace ProjectCleanup
                 string paramClgName = "Ceiling Height";
                 string tagPath = @"S:\Shared Folders\Lifestyle USA Design\Library 2023\Annotation\Tags\Room Tag.rfa";
 
-                FamilyLoadOptions famRoomTagLoadOptions = new FamilyLoadOptions();
+                clsFamilyLoadOptions famRoomTagLoadOptions = new clsFamilyLoadOptions();
 
                 Family family = null;
 
@@ -547,7 +547,7 @@ namespace ProjectCleanup
                 List<string> famListLighting = new List<string> { "LT-No Base.rfa" };
                 List<string> famListShelving = new List<string> { "Rod and Shelf.rfa", "Shelving.rfa" };                
 
-                FamilyLoadOptions familyLoadOptions = new FamilyLoadOptions();                
+                clsFamilyLoadOptions familyLoadOptions = new clsFamilyLoadOptions();                
 
                 if (curForm.GetCheckBoxFamilies() == true)
                 {
@@ -608,8 +608,13 @@ namespace ProjectCleanup
 
                 #region Remove Duplicate Electrical & Lighting Families
 
-                // remove electrical families with numbers at the end
-                // i.e. EL-Wall Base 2
+                // remove electrical families with numbers at the end (i.e. EL-Wall Base 2)
+
+                // create variables to hold family names
+
+                Family elWall = Utils.GetFamilyByName(doc, "EL-Wall Base");
+                Family elNoBase = Utils.GetFamilyByName(doc, "EL-No Base");
+                Family ltNoBase = Utils.GetFamilyByName(doc, "LT-No Base");
 
                 // create lists to hold families
 
@@ -619,7 +624,56 @@ namespace ProjectCleanup
 
                 if (curForm.GetCheckBoxElectrical() == true)
                 {
+                    foreach (Family curFam in listEL_Wall)
+                    {
+                        string famName = curFam.Name;
+                        // check if family name ends with ' #'
+                        if (famName.Length > 2 && famName[famName.Length - 2] == ' ')
+                        {
+                            char lastChar = famName[famName.Length - 1];
+                            // check if the last character is a digit
+                            if (Char.IsDigit(lastChar))
+                            {
+                                // if the last character is a digit, get the types in use
+                                // and replace with types from EL-Wall Base
+                                // delete the family from the project
+                            }
+                        }
+                    }
 
+                    foreach (Family curFam in listEL_NoBase)
+                    {
+                        string famName = curFam.Name;
+                        // check if family name ends with '-#'
+                        if (famName.Length > 2 && famName[famName.Length - 2] == ' ')
+                        {
+                            char lastChar = famName[famName.Length - 1];
+                            // check if the last character is a digit
+                            if (Char.IsDigit(lastChar))
+                            {
+                                // if the last character is a digit, get the types in use
+                                // and replace with types from EL-Wall Base
+                                // delete the family from the project
+                            }
+                        }
+                    }
+
+                    foreach (Family curFam in listLT_NoBase)
+                    {
+                        string famName = curFam.Name;
+                        // check if family name ends with '-#'
+                        if (famName.Length > 2 && famName[famName.Length - 2] == ' ')
+                        {
+                            char lastChar = famName[famName.Length - 1];
+                            // check if the last character is a digit
+                            if (Char.IsDigit(lastChar))
+                            {
+                                // if the last character is a digit, get the types in use
+                                // and replace with types from EL-Wall Base
+                                // delete the family from the project
+                            }
+                        }
+                    }
                 }
 
                 #endregion
@@ -638,51 +692,5 @@ namespace ProjectCleanup
             var method = MethodBase.GetCurrentMethod().DeclaringType?.FullName;
             return method;
         }
-
-        public class FamilyLoadOptions : IFamilyLoadOptions
-        {
-            #region IFamilyLoadOptions Members
-
-            public bool OnFamilyFound(bool familyInUse, out bool overwriteParameterValues)
-            {
-                if (!familyInUse)
-                {
-                    TaskDialog.Show("SampleFamilyLoadOptions", "The family has not been in use and will keep loading.");
-
-                    overwriteParameterValues = true;
-                    return true;
-                }
-                else
-                {
-                    TaskDialog.Show("SampleFamilyLoadOptions", "The family has been in use but will still be loaded with existing parameters overwritten.");
-
-                    overwriteParameterValues = true;
-                    return true;
-                }
-            }
-
-            public bool OnSharedFamilyFound(Family sharedFamily, bool familyInUse, out FamilySource source, out bool overwriteParameterValues)
-            {
-                if (!familyInUse)
-                {
-                    TaskDialog.Show("SampleFamilyLoadOptions", "The shared family has not been in use and will keep loading.");
-
-                    source = FamilySource.Family;
-                    overwriteParameterValues = true;
-                    return true;
-                }
-                else
-                {
-                    TaskDialog.Show("SampleFamilyLoadOptions", "The shared family has been in use but will still be loaded from the FamilySource with existing parameters overwritten.");
-
-                    source = FamilySource.Family;
-                    overwriteParameterValues = true;
-                    return true;
-                }
-            }
-
-            #endregion
-        }
     }
-
 }

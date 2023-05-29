@@ -50,6 +50,22 @@ namespace ProjectCleanup
             return m_returnList;
         }
 
+        public static Family GetFamilyByName(Document curDoc, string familyName)
+        {
+            List<Family> m_famList = GetAllFamilies(curDoc);
+
+            //loop through family symbols in current project and look for a match
+            foreach (Family curFam in m_famList)
+            {
+                if (curFam.Name == familyName)
+                {
+                    return curFam;
+                }
+            }
+
+            return null;
+        }
+
         #endregion
 
         #region Parameters
