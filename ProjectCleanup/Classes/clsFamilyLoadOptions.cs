@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProjectCleanup
 {
-    internal class clsFamilyLoadOptions
+    internal class clsFamilyLoadOptions : IFamilyLoadOptions
     {
         
             public bool OnFamilyFound(bool familyInUse, out bool overwriteParameterValues)

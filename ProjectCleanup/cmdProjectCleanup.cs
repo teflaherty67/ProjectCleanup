@@ -216,18 +216,195 @@ namespace ProjectCleanup
                         doc.Delete(curSchedule.Id);
                     }
                 }
-                
+
                 #endregion
 
                 #region Rename Schedules
 
-                // get all the schedules
-                List<ViewSchedule> scheduleList = Utils.GetAllSchedules(doc);
+                // create lists for schedules by name contains
+                List<ViewSchedule> veneerList = Utils.GetScheduleByNameContains(doc, "Exterior Veneer Calculations");
+                List<ViewSchedule> floorList = Utils.GetScheduleByNameContains(doc, "Floor Areas");
+                List<ViewSchedule> frameList = Utils.GetScheduleByNameContains(doc, "Frame Areas");
+                List<ViewSchedule> atticList = Utils.GetScheduleByNameContains(doc, "Roof Ventilation Calculations");
+                List<ViewSchedule> equipmentList = Utils.GetScheduleByNameContains(doc, "Roof Ventilation Equipment");
+                List<ViewSchedule> indexList = Utils.GetScheduleByNameContains(doc, "Sheet Index");
 
+                // create a counter for the schedules that will be renamed
+                int countRenamed = 0;
+
+                // create a counter for the schedules that will not be renamed
+                int countEdit = 0;
+                                
                 if (curForm.GetCheckBoxSchedRename() == true)
                 {
-                    foreach (ViewSchedule curSchedule in scheduleList)
+                    foreach (ViewSchedule curSchedule in veneerList)
                     {
+                        // get the current name                        
+                        string originalString = curSchedule.Name;
+
+                        // split the name after the last word in the title
+                        string schedTitle = originalString.Substring(0, 28);
+                        string schedElev = originalString.Substring(29);
+
+                        // get the index of the first character in the second string that is a letter
+                        int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
+
+                        // set the value of curElev to that letter
+                        string curElev = schedElev.Substring(elevIndex, 1);
+
+                        // if the letter doesn't equal "E"
+                        if (curElev != "E")
+                        {
+                            try
+                            {
+                                // try to replace schedElev with "- Elevation " + curElev
+                                curSchedule.Name = schedTitle + " - Elevation " + curElev;
+
+                                // if successful, increment the renamed count by 1
+                                countRenamed++;
+                            }
+                            catch (Exception)
+                            {
+                                // if unsuccessful, increment the edit count by 1
+                                countEdit++;
+                            }
+                        }
+                    }
+
+                    foreach (ViewSchedule curSchedule in floorList)
+                    {
+                        // get the current name
+                        string originalString = curSchedule.Name;
+
+                        // split the name after the last word in the title
+                        string schedTitle = originalString.Substring(0, 11);
+                        string schedElev = originalString.Substring(12);
+
+                        // get the index of the first character in the second string that is a letter
+                        int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
+
+                        // set the value of curElev to that letter
+                        string curElev = schedElev.Substring(elevIndex, 1);
+
+                        // if the letter doesn't equal "E"
+                        if (curElev != "E")
+                        {
+                            try
+                            {
+                                // try to replace schedElev with "- Elevation " + curElev
+                                curSchedule.Name = schedTitle + " - Elevation " + curElev;
+
+                                // if successful, increment the renamed count by 1
+                                countRenamed++;
+                            }
+                            catch (Exception)
+                            {
+                                // if unsuccessful, increment the edit count by 1
+                                countEdit++;
+                            }
+                        }
+                    }
+
+                    foreach (ViewSchedule curSchedule in frameList)
+                    {
+                        // get the current name 
+                        string originalString = curSchedule.Name;
+
+                        // split the name after the last word in the title
+                        string schedTitle = originalString.Substring(0, 10);
+                        string schedElev = originalString.Substring(11);
+
+                        // get the index of the first character in the second string that is a letter
+                        int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
+
+                        // set the value of curElev to that letter
+                        string curElev = schedElev.Substring(elevIndex, 1);
+
+                        // if the letter doesn't equal "E"
+                        if (curElev != "E")
+                        {
+                            try
+                            {
+                                // try to replace schedElev with "- Elevation " + curElev
+                                curSchedule.Name = schedTitle + " - Elevation " + curElev;
+
+                                // if successful, increment the renamed count by 1
+                                countRenamed++;
+                            }
+                            catch (Exception)
+                            {
+                                // if unsuccessful, increment the edit count by 1
+                                countEdit++;
+                            }
+                        }
+                    }
+
+                    foreach (ViewSchedule curSchedule in atticList)
+                    {
+                        // get the current name 
+                        string originalString = curSchedule.Name;
+
+                        // split the name after the last word in the title
+                        string schedTitle = originalString.Substring(0, 29);
+                        string schedElev = originalString.Substring(30);
+
+                        // get the index of the first character in the second string that is a letter
+                        int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
+
+                        // set the value of curElev to that letter
+                        string curElev = schedElev.Substring(elevIndex, 1);
+
+                        // if the letter doesn't equal "E"
+                        if (curElev != "E")
+                        {
+                            try
+                            {
+                                // try to replace schedElev with "- Elevation " + curElev
+                                curSchedule.Name = schedTitle + " - Elevation " + curElev;
+
+                                // if successful, increment the renamed count by 1
+                                countRenamed++;
+                            }
+                            catch (Exception)
+                            {
+                                // if unsuccessful, increment the edit count by 1
+                                countEdit++;
+                            }
+                        }
+                    }
+
+                    foreach (ViewSchedule curSchedule in equipmentList)
+                    {
+                        // get the current name 
+                        string originalString = curSchedule.Name;
+
+                        // split the name after the last word in the title
+                        string schedTitle = originalString.Substring(0, 27);
+                        string schedElev = originalString.Substring(28);
+
+                        // get the index of the first character in the second string that is a letter
+                        int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
+
+                        // set the value of curElev to that letter
+                        string curElev = schedElev.Substring(elevIndex, 1);
+
+                        // if the letter doesn't equal "E"
+                        if (curElev != "E")
+                        {
+                            try
+                            {
+                                // try to replace schedElev with "- Elevation " + curElev
+                                curSchedule.Name = schedTitle + " - Elevation " + curElev;
+
+                                // if successful, increment the renamed count by 1
+                                countRenamed++;
+                            }
+                            catch (Exception)
+                            {
+                                // if unsuccessful, increment the edit count by 1
+                                countEdit++;
+                            }
+                        }
                         // create a variable for the schedule name
                         string[] inputString = curSchedule.Name.Split('-');
                         if(inputString.Length >1) 
@@ -249,8 +426,43 @@ namespace ProjectCleanup
                             }
                             else
                                 continue;
-                        }                        
+                        }                      
+
                     }
+
+                    foreach (ViewSchedule curSchedule in indexList)
+                    {
+                        // get the current name 
+                        string originalString = curSchedule.Name;
+
+                        // split the name after the last word in the title
+                        string schedTitle = originalString.Substring(0, 11);
+                        string schedElev = originalString.Substring(12);
+
+                        // get the index of the first character in the second string that is a letter
+                        int elevIndex = Utils.GetIndexOfFirstLetter(schedElev);
+
+                        // set the value of curElev to that letter
+                        string curElev = schedElev.Substring(elevIndex, 1);
+
+                        // if the letter doesn't equal "E"
+                        if (curElev != "E")
+                        {
+                            try
+                            {
+                                // try to replace schedElev with "- Elevation " + curElev
+                                curSchedule.Name = schedTitle + " - Elevation " + curElev;
+
+                                // if successful, increment the renamed count by 1
+                                countRenamed++;
+                            }
+                            catch (Exception)
+                            {
+                                // if unsuccessful, increment the edit count by 1
+                                countEdit++;
+                            }
+                        }
+                    }                   
                 }
 
                 #endregion
@@ -323,7 +535,7 @@ namespace ProjectCleanup
                 string paramClgName = "Ceiling Height";
                 string tagPath = @"S:\Shared Folders\Lifestyle USA Design\Library 2023\Annotation\Tags\Room Tag.rfa";
 
-                FamilyLoadOptions famRoomTagLoadOptions = new FamilyLoadOptions();
+                clsFamilyLoadOptions famRoomTagLoadOptions = new clsFamilyLoadOptions();
 
                 Family family = null;
 
@@ -360,7 +572,7 @@ namespace ProjectCleanup
                 List<string> famListLighting = new List<string> { "LT-No Base.rfa" };
                 List<string> famListShelving = new List<string> { "Rod and Shelf.rfa", "Shelving.rfa" };                
 
-                FamilyLoadOptions familyLoadOptions = new FamilyLoadOptions();                
+                clsFamilyLoadOptions familyLoadOptions = new clsFamilyLoadOptions();                
 
                 if (curForm.GetCheckBoxFamilies() == true)
                 {
@@ -405,21 +617,29 @@ namespace ProjectCleanup
 
                 #region Update Line Styles
 
-                // update the <Centerline> line style line pattern to Center 1/8"
+                // get the line style called <Centerline>
+                GraphicsStyle curCenterline = Utils.GetLinestyleByName(doc, "<Centerline>");
 
-                // set some variables for line style & line pattern
+                // get the line pattern called: Center 1/8"
+                LinePatternElement newCenterLP = Utils.GetLinePatternByName(doc, "Center 1/8\"");
 
                 if (curForm.GetCheckBoxLinestyles() == true)
                 {
-
+                    curCenterline.GraphicsStyleCategory.SetLinePatternId(newCenterLP.Id,
+                        GraphicsStyleType.Projection);
                 }
 
                 #endregion
 
                 #region Remove Duplicate Electrical & Lighting Families
 
-                // remove electrical families with numbers at the end
-                // i.e. EL-Wall Base 2
+                // remove electrical families with numbers at the end (i.e. EL-Wall Base 2)
+
+                // create variables to hold family names
+
+                Family elWall = Utils.GetFamilyByName(doc, "EL-Wall Base");
+                Family elNoBase = Utils.GetFamilyByName(doc, "EL-No Base");
+                Family ltNoBase = Utils.GetFamilyByName(doc, "LT-No Base");
 
                 // create lists to hold families
 
@@ -429,10 +649,62 @@ namespace ProjectCleanup
 
                 if (curForm.GetCheckBoxElectrical() == true)
                 {
+                    foreach (Family curFam in listEL_Wall)
+                    {
+                        string famName = curFam.Name;
+                        // check if family name ends with ' #'
+                        if (famName.Length > 2 && famName[famName.Length - 2] == ' ')
+                        {
+                            char lastChar = famName[famName.Length - 1];
+                            // check if the last character is a digit
+                            if (Char.IsDigit(lastChar))
+                            {
+                                // if the last character is a digit, get the types in use
+                                // and replace with types from EL-Wall Base
+                                // delete the family from the project
+                            }
+                        }
+                    }
 
+                    foreach (Family curFam in listEL_NoBase)
+                    {
+                        string famName = curFam.Name;
+                        // check if family name ends with '-#'
+                        if (famName.Length > 2 && famName[famName.Length - 2] == ' ')
+                        {
+                            char lastChar = famName[famName.Length - 1];
+                            // check if the last character is a digit
+                            if (Char.IsDigit(lastChar))
+                            {
+                                // if the last character is a digit, get the types in use
+                                // and replace with types from EL-Wall Base
+                                // delete the family from the project
+                            }
+                        }
+                    }
+
+                    foreach (Family curFam in listLT_NoBase)
+                    {
+                        string famName = curFam.Name;
+                        // check if family name ends with '-#'
+                        if (famName.Length > 2 && famName[famName.Length - 2] == ' ')
+                        {
+                            char lastChar = famName[famName.Length - 1];
+                            // check if the last character is a digit
+                            if (Char.IsDigit(lastChar))
+                            {
+                                // if the last character is a digit, get the types in use
+                                // and replace with types from EL-Wall Base
+                                // delete the family from the project
+                            }
+                        }
+                    }
                 }
 
                 #endregion
+
+                // TaskDialog.Show("Complete", countRenamed.ToString() + " schedules will be renamed. "
+                       // + countEdit.ToString() + " schedules would have duplicate names & can not be renamed.");
 
                 t.Commit();
             }
@@ -491,5 +763,4 @@ namespace ProjectCleanup
             #endregion
         }
     }
-
 }
