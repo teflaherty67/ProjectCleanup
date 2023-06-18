@@ -37,8 +37,8 @@ namespace ProjectCleanup
             // open form
             frmProjectCleanup curForm = new frmProjectCleanup(uniqueGroups)
             {
-                Width = 800,
-                Height = 450,
+                Width = 400,
+                Height = 650,
                 WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen,
                 Topmost = true,
             };
@@ -206,6 +206,8 @@ namespace ProjectCleanup
                 //combine the lists together
                 schedules.AddRange(areaSchedList);
                 schedules.AddRange(roofSchedList);
+
+
 
                 if (curForm.GetCheckBoxSchedules() == true)
                 {
@@ -403,6 +405,29 @@ namespace ProjectCleanup
                                 countEdit++;
                             }
                         }
+                        // create a variable for the schedule name
+                        string[] inputString = curSchedule.Name.Split('-');
+                        if(inputString.Length >1) 
+                        {
+                            string curElev = inputString[1].Trim()[0].ToString();
+
+                            string replaceString = "Elevation " + curElev;
+
+                            string originalString = curSchedule.Name;
+
+                            // check if first character after hypen is "E"
+                            if (curElev != "E")
+                            {
+                                string[] splitString = curSchedule.Name.Split('-');
+                                
+                                string newString = splitString[0] + "- " + replaceString;
+
+                                curSchedule.Name = newString;
+                            }
+                            else
+                                continue;
+                        }                      
+
                     }
 
                     foreach (ViewSchedule curSchedule in indexList)
@@ -519,7 +544,7 @@ namespace ProjectCleanup
                 {
                     if (Utils.DoesProjectParamExist(doc, paramClgName))
                     {
-                        return Result.Failed;
+                        return Result.Cancelled;
                     }
                     else
                     {
@@ -691,6 +716,51 @@ namespace ProjectCleanup
         {
             var method = MethodBase.GetCurrentMethod().DeclaringType?.FullName;
             return method;
+        }
+
+        public class FamilyLoadOptions : IFamilyLoadOptions
+        {
+            #region IFamilyLoadOptions Members
+
+            public bool OnFamilyFound(bool familyInUse, out bool overwriteParameterValues)
+            {
+                if (!familyInUse)
+                {
+                    // TaskDialog.Show("SampleFamilyLoadOptions", "The family has not been in use and will keep loading.");
+
+                    overwriteParameterValues = true;
+                    return true;
+                }
+                else
+                {
+                    // TaskDialog.Show("SampleFamilyLoadOptions", "The family has been in use but will still be loaded with existing parameters overwritten.");
+
+                    overwriteParameterValues = true;
+                    return true;
+                }
+            }
+
+            public bool OnSharedFamilyFound(Family sharedFamily, bool familyInUse, out FamilySource source, out bool overwriteParameterValues)
+            {
+                if (!familyInUse)
+                {
+                    // TaskDialog.Show("SampleFamilyLoadOptions", "The shared family has not been in use and will keep loading.");
+
+                    source = FamilySource.Family;
+                    overwriteParameterValues = true;
+                    return true;
+                }
+                else
+                {
+                    // TaskDialog.Show("SampleFamilyLoadOptions", "The shared family has been in use but will still be loaded from the FamilySource with existing parameters overwritten.");
+
+                    source = FamilySource.Family;
+                    overwriteParameterValues = true;
+                    return true;
+                }
+            }
+
+            #endregion
         }
     }
 }

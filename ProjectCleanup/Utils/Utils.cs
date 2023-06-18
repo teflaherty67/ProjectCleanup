@@ -1,4 +1,6 @@
-﻿using Autodesk.Revit.DB;
+﻿#region Namespaces
+
+using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using System;
 using System.Collections.Generic;
@@ -10,12 +12,15 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
+#endregion
+
 namespace ProjectCleanup
 {
     internal static class Utils
     {
 
         #region Families
+
 
         public static List<Family> GetAllFamilies(Document doc)
         {
@@ -48,22 +53,6 @@ namespace ProjectCleanup
             }
 
             return m_returnList;
-        }
-
-        public static Family GetFamilyByName(Document curDoc, string familyName)
-        {
-            List<Family> m_famList = GetAllFamilies(curDoc);
-
-            //loop through family symbols in current project and look for a match
-            foreach (Family curFam in m_famList)
-            {
-                if (curFam.Name == familyName)
-                {
-                    return curFam;
-                }
-            }
-
-            return null;
         }
 
         #endregion
@@ -100,20 +89,9 @@ namespace ProjectCleanup
             return "";
         }
 
-        internal static Parameter GetParameterByName(Element element, string paramName)
+        public static List<ParameterData> GetAllProjectParameters(Document curDoc)
         {
-            foreach (Parameter curParam in element.Parameters)
-            {
-                if (curParam.Definition.Name.ToString() == paramName)
-                    return curParam;
-            }
-
-            return null;
-        }
-
-        public static List<ParameterData> GetAllProjectParameters(Document doc)
-        {
-            if (doc.IsFamilyDocument)
+            if (curDoc.IsFamilyDocument)
             {
                 TaskDialog.Show("Error", "Cannot be a family document.");
                 return null;
@@ -121,7 +99,7 @@ namespace ProjectCleanup
 
             List<ParameterData> paraList = new List<ParameterData>();
 
-            BindingMap map = doc.ParameterBindings;
+            BindingMap map = curDoc.ParameterBindings;
             DefinitionBindingMapIterator iter = map.ForwardIterator();
             iter.Reset();
             while (iter.MoveNext())
@@ -136,19 +114,18 @@ namespace ProjectCleanup
             return paraList;
         }
 
-        internal static bool DoesProjectParamExist(Document doc, string paramName)
+        public static bool DoesProjectParamExist(Document curDoc, string pName)
         {
-            List<ParameterData> pdList = GetAllProjectParameters(doc);
+            List<ParameterData> pdList = GetAllProjectParameters(curDoc);
             foreach (ParameterData pd in pdList)
             {
-                if (pd.name == paramName)
+                if (pd.name == pName)
                 {
                     return true;
                 }
             }
             return false;
         }
-
         public static void CreateSharedParam(Document curDoc, string groupName, string paramName, BuiltInCategory cat)
         {
             Definition curDef = null;
@@ -169,6 +146,10 @@ namespace ProjectCleanup
                 //create param
                 curDef = AddParamToFile(defFile, groupName, paramName);
             }
+            else
+            {
+                curDef = GetParameterDefinitionFromFile(defFile, groupName, paramName);
+            }
 
             //check if param is added to views - if not then add
             if (ParamAddedToFile(curDoc, paramName) == false)
@@ -176,6 +157,25 @@ namespace ProjectCleanup
                 //add parameter to current Revitfile
                 AddParamToDocument(curDoc, curDef, cat);
             }
+        }
+
+
+        private static Definition GetParameterDefinitionFromFile(DefinitionFile defFile, string groupName, string paramName)
+        {
+            // iterate the Definition groups of this file
+            foreach (DefinitionGroup group in defFile.Groups)
+            {
+                if (group.Name == groupName)
+                {
+                    // iterate the difinitions
+                    foreach (Definition definition in group.Definitions)
+                    {
+                        if (definition.Name == paramName)
+                            return definition;
+                    }
+                }
+            }
+            return null;
         }
 
         //check if specified parameter is already added to Revit file
@@ -204,21 +204,12 @@ namespace ProjectCleanup
             //create binding
             ElementBinding curBinding = curDoc.Application.Create.NewInstanceBinding(myCatSet);
 
-            //insert definition into binding
-            using (Transaction curTrans = new Transaction(curDoc, "Added Shared Parameter"))
-            {
-                if (curTrans.Start() == TransactionStatus.Started)
-                {
-                    //do something
-                    paramAdded = curDoc.ParameterBindings.Insert(curDef, curBinding, BuiltInParameterGroup.PG_IDENTITY_DATA);
-                }
-
-                //commit changes
-                curTrans.Commit();
-            }
-
+            //do something
+            paramAdded = curDoc.ParameterBindings.Insert(curDef, curBinding, BuiltInParameterGroup.PG_IDENTITY_DATA);
+            
             return paramAdded;
         }
+
 
         //check if specified parameter exists in shared parameter file
         public static bool ParamExists(DefinitionGroups groupList, string groupName, string paramName)
@@ -263,6 +254,7 @@ namespace ProjectCleanup
 
             return newParam;
         }
+
         public static DefinitionGroup GetDefinitionGroup(DefinitionFile defFile, string groupName)
         {
             //loop through groups and look for match
@@ -274,6 +266,167 @@ namespace ProjectCleanup
                 }
             }
 
+            return null;
+        }
+
+
+        internal static List<ViewSchedule> GetScheduleByNameContains(Document doc, string scheduleString)
+        {
+            List<ViewSchedule> m_scheduleList = GetAllSchedules(doc);
+
+            List<ViewSchedule> m_returnList = new List<ViewSchedule>();
+
+            foreach (ViewSchedule curSchedule in m_scheduleList)
+            {
+                if (curSchedule.Name.Contains(scheduleString))
+                    m_returnList.Add(curSchedule);
+            }
+
+            return m_returnList;
+        }
+
+        #endregion
+
+        #region Sheets
+
+        internal static List<ViewSheet> GetAllSheets(Document doc)
+        {
+            //get all sheets
+            FilteredElementCollector m_colViews = new FilteredElementCollector(doc);
+            m_colViews.OfCategory(BuiltInCategory.OST_Sheets);
+
+            List<ViewSheet> m_sheets = new List<ViewSheet>();
+            foreach (ViewSheet x in m_colViews.ToElements())
+            {
+                m_sheets.Add(x);
+            }
+
+            return m_sheets;
+        }
+
+        #endregion
+
+        #region Parameters
+
+        public struct ParameterData
+        {
+            public Definition def;
+            public ElementBinding binding;
+            public string name;
+            public bool IsSharedStatusKnown;
+            public bool IsShared;
+            public string GUID;
+            public ElementId id;
+        }
+
+
+        internal static List<string> GetAllSheetGroupsByCategory(Document doc, string categoryValue)
+        {
+            List<string> m_groups = new List<string>();
+
+            // Get all sheet views in the project that have the specified category value
+            List<ViewSheet> m_sheets = GetAllSheetsByCategory(doc, categoryValue);
+
+            // Iterate through each sheet view and get the value of the "Group" parameter
+            foreach (ViewSheet sheet in m_sheets)
+            {
+                // Get the "Group" parameter of the sheet view
+                Parameter groupParameter = sheet.LookupParameter("Group");
+
+                // Check if the "Group" parameter is valid and get its value
+                if (groupParameter != null && groupParameter.Definition.Name == "Group")
+                {
+                    string groupValue = groupParameter.AsString();
+
+                    // Check if the group value is not null or empty, and if it hasn't already been added to the list
+                    if (!string.IsNullOrEmpty(groupValue) && !m_groups.Contains(groupValue))
+                    {
+                        m_groups.Add(groupValue);
+                    }
+                }
+            }
+
+            return m_groups;
+        }
+
+        #endregion
+
+
+        #region Views
+
+
+        internal static List<View> GetAllViews(Document doc)
+        {
+            {
+
+                FilteredElementCollector m_colviews = new FilteredElementCollector(doc);
+                m_colviews.OfCategory(BuiltInCategory.OST_Views);
+
+                List<View> m_views = new List<View>();
+                foreach (View x in m_colviews.ToElements())
+                {
+                    m_views.Add(x);
+                }
+
+                return m_views;
+            }
+        }
+
+        internal static List<View> GetAllViewsByCategory(Document doc, string catName)
+        {
+            List<View> m_colViews = GetAllViews(doc);
+
+            List<View> m_returnList = new List<View>();
+
+            foreach (View curView in m_colViews)
+            {
+                string viewCat = GetParameterValueByName(curView, "Category");
+
+                if (viewCat == catName)
+                    m_returnList.Add(curView);
+            }
+
+            return m_returnList;
+        }
+
+        internal static List<View> GetAllViewsByCategoryAndViewTemplate(Document doc, string catName, string vtName)
+        {
+            List<View> m_colViews = GetAllViewsByCategory(doc, catName);
+
+            List<View> m_returnList = new List<View>();
+
+            foreach (View curView in m_colViews)
+            {
+                ElementId vtId = curView.ViewTemplateId;
+
+                if (vtId != ElementId.InvalidElementId)
+                {
+                    View vt = doc.GetElement(vtId) as View;
+
+                    if (vt.Name == vtName)
+                        m_returnList.Add(curView);
+                }
+            }
+
+            return m_returnList;
+        }
+
+        #endregion
+
+        internal static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+                if (child != null && child is T)
+                    return (T)child;
+                else
+                {
+                    T foundChild = FindVisualChild<T>(child);
+                    if (foundChild != null)
+                        return foundChild;
+                }
+            }
             return null;
         }
 
@@ -534,5 +687,6 @@ namespace ProjectCleanup
             }
             return null;
         }
+
     }
 }
