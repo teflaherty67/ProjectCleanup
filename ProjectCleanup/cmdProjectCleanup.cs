@@ -38,7 +38,7 @@ namespace ProjectCleanup
             frmProjectCleanup curForm = new frmProjectCleanup(uniqueGroups)
             {
                 Width = 400,
-                Height = 650,
+                Height = 800,
                 WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen,
                 Topmost = true,
             };
