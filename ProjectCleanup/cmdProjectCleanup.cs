@@ -117,9 +117,6 @@ namespace ProjectCleanup
                 // create a list of views to delete
                 List<View> viewsToDelete = new List<View>();
 
-                // create a list opf views to keep
-                List<View> viewsToKeep = new List<View>();
-
                 // get all the views in the project by category
                 List<View> listViews = new List<View>();
                 List<View> listCat01 = Utils.GetAllViewsByCategory(doc, "01:Floor Plans");
@@ -159,7 +156,6 @@ namespace ProjectCleanup
                         // check if view is already on sheet
                         if (Viewport.CanAddViewToSheet(doc, sheetColl.FirstElementId(), curView.Id))
                         {
-
                             // check if view has dependent views
                             if (curView.GetDependentViewIds().Count() == 0)
                             {
