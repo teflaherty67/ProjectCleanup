@@ -49,8 +49,7 @@ namespace ProjectCleanup
 
             // set some variables
             string txtClient = curForm.GetComboboxClient();
-            string floorNum = curForm.GetComboboxFloors();
-
+           
             string nameClient = "";
 
             if (txtClient == "Central Texas")
@@ -175,45 +174,29 @@ namespace ProjectCleanup
                         // delete the view
                         doc.Delete(deleteView.Id);
                     }
-                }               
+                }
 
                 #endregion
 
                 #region Delete Unused Schedules
 
-                // set some variables
-                string areaString = "";
-                string roofString = "";
+                // create a list of all schedules by name
+                List<string> schedNames = Utils.GetAllScheduleNames(doc);
 
-                if (floorNum == "1")
-                {
-                    areaString = "(multi-level)";
-                    roofString = "(multi-space)";
-                }
-                else if (floorNum != "1")
-                {
-                    areaString = "(single level)";
-                    roofString = "(single space)";
-                }
+                // create a list of the names of all sheet schedule instances
+                List<string> schedInstances = Utils.GetAllSSINames(doc);
 
-                // get all the schedules by type
-                List<ViewSchedule> schedules = new List<ViewSchedule>();
+                // compare the 2 lists and create a list of schedules not used by name
+                List<string> schedNotUsed = Utils.GetSchedulesNotUsed(schedNames, schedInstances);
 
-                List<ViewSchedule> areaSchedList = Utils.GetScheduleByNameContains(doc, areaString);
-
-                List<ViewSchedule> roofSchedList = Utils.GetScheduleByNameContains(doc, roofString);
-
-                //combine the lists together
-                schedules.AddRange(areaSchedList);
-                schedules.AddRange(roofSchedList);
-
-
-
+                // convert the list of schedule names to a list of View Schedules
+                List<ViewSchedule> SchedulesToDelete = Utils.GetSchedulesToDelete(doc, schedNotUsed);
+                
                 if (curForm.GetCheckBoxSchedules() == true)
                 {
-                    foreach (ViewSchedule curSchedule in schedules)
+                    foreach (ViewSchedule curSched in SchedulesToDelete)
                     {
-                        doc.Delete(curSchedule.Id);
+                        doc.Delete(curSched.Id);
                     }
                 }
 

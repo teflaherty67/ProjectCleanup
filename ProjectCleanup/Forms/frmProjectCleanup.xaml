@@ -9,7 +9,6 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="190"/>
@@ -23,15 +22,8 @@
         <GroupBox Header="Client Name:" BorderThickness="0">
             <ComboBox x:Name="cmbClient" Height="25" Width="100" HorizontalAlignment="Left"/>
         </GroupBox>
-        <GroupBox Grid.Row="1" BorderThickness="0" Header="Number of Floors:">
-            <ComboBox x:Name="cmbFloors" Height="25" Width="100" HorizontalAlignment="Left"/>
-        </GroupBox>
-        <StackPanel Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Center">
-            <Button x:Name="btnAll" Width="90" Height="25" Content="Chcek All" HorizontalAlignment="Right" Click="btnAll_Click"/>
-            <Button x:Name="btnNone" Content="Check None" Width="90" Height="25" HorizontalAlignment="Right" Click="btnNone_Click" Margin="0,10,0,0"/>
-        </StackPanel>
-        <Label Grid.Row="2" Content="Select sheet groups to delete:"/>
-        <ListBox x:Name="lbxGroups" Grid.Row="3" Margin="5,0,0,0">
+        <Label Grid.Row="1" Content="Select sheet groups to delete:"/>
+        <ListBox x:Name="lbxGroups" Grid.Row="2" Margin="5,0,0,0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -40,7 +32,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <StackPanel Grid.Row="4">
+        <StackPanel Grid.Row="3">
             <CheckBox x:Name="chbViews" VerticalAlignment="Center" Content="Delete unused views" Margin="5,5,0,5"/>
             <CheckBox x:Name="chbSchedules" VerticalAlignment="Center" Margin="5,0,0,5" Content="Delete unused schedules"/>
             <CheckBox x:Name="chbSchedRename" VerticalAlignment="Center" Margin="5,0,0,5" Content="Rename Schedules"/>
@@ -50,8 +42,12 @@
             <CheckBox x:Name="chbFamilies" VerticalAlignment="Center" Margin="5,0,0,5" Content="Update families"/>
             <CheckBox x:Name="chbLinestyles" VerticalAlignment="Center" Content="Correct linestyles" Margin="5,0,0,5"/>
             <CheckBox x:Name="chbElectrical" VerticalAlignment="Center" Margin="5,0,0,0" Content="Clean electrical families" />
-        </StackPanel>        
-        <StackPanel Grid.Row="10" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+        </StackPanel>
+        <StackPanel Grid.Row="3" Grid.Column="1">
+            <Button x:Name="btnAll" Width="90" Height="25" Content="Chcek All" HorizontalAlignment="Right" Click="btnAll_Click" Margin="0,5,0,0"/>
+            <Button x:Name="btnNone" Content="Check None" Width="90" Height="25" HorizontalAlignment="Right" Click="btnNone_Click" Margin="0,10,0,0"/>
+        </StackPanel>
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="btnOK" Width="90" Height="25" Margin="0,0,5,0" Content="OK" Click="btnOK_Click"/>
             <Button x:Name="btnCancel" Width="90" Margin="5,0,5,0" Content="Cancel" Height="25" Click="btnCancel_Click"/>
             <Button x:Name="btnHelp" Width="90" Height="25" Margin="5,0,0,0" Content="Help" Click="btnHelp_Click"/>

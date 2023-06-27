@@ -56,26 +56,12 @@ namespace ProjectCleanup
                 cmbClient.Items.Add(client);
             }
 
-            cmbClient.SelectedIndex = 0;
-
-            List<string> listFloors = new List<string> { "1", "2", "3" };
-
-            foreach (string floor in listFloors)
-            {
-                cmbFloors.Items.Add(floor);
-            }
-
-            cmbFloors.SelectedIndex = 0;
+            cmbClient.SelectedIndex = 0;            
         }
 
         internal string GetComboboxClient()
         {
             return cmbClient.Text.ToString();
-        }
-
-        internal string GetComboboxFloors()
-        {
-            return cmbFloors.SelectedItem.ToString();
         }
 
         internal bool GetCheckBoxViews()
