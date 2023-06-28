@@ -79,12 +79,14 @@ namespace ProjectCleanup
             {
                 t.Start("Project Cleanup");
 
-                //SET VALUE OF CLIENT NAME
+                #region Client Name
 
                 if (null != clientInfo)
                 {
                     clientInfo.ClientName = nameClient;
                 }
+
+                #endregion
 
                 #region Delete Sheet Groups
 
@@ -118,6 +120,7 @@ namespace ProjectCleanup
 
                 // get all the views in the project by category
                 List<View> listViews = new List<View>();
+                List<View> listCat00 = Utils.GetAllViewsByCategory(doc, "00:Form/Foundation Plans");
                 List<View> listCat01 = Utils.GetAllViewsByCategory(doc, "01:Floor Plans");
                 List<View> listCat02 = Utils.GetAllViewsByCategory(doc, "02:Elevations");
                 List<View> listCat03 = Utils.GetAllViewsByCategory(doc, "03:Roof Plans");
@@ -131,6 +134,7 @@ namespace ProjectCleanup
                 List<View> listCat14 = Utils.GetAllViewsByCategoryAndViewTemplate(doc, "14:Ceiling Views", "14-Soffit");
 
                 // combine the lists together
+                listViews.AddRange(listCat00);
                 listViews.AddRange(listCat01);
                 listViews.AddRange(listCat02);
                 listViews.AddRange(listCat03);
@@ -161,7 +165,6 @@ namespace ProjectCleanup
                                 // add view to list of views to be deleted
                                 viewsToDelete.Add(curView);
                             }
-
                         }
                     }
 
@@ -458,27 +461,27 @@ namespace ProjectCleanup
                 {
                     foreach (ViewSheet curSheet in activeSheets)
                     {
-                        string sheetName = curSheet.Name;
-                        // check if sheet name ends with '-#'
-                        if (sheetName.Length > 2 && sheetName[sheetName.Length - 2] == '-')
+                        string originalName = curSheet.Name;                        
+                        string newName = "";
+
+                        // check the last character of the original name
+                        if (originalName.Length > 0 && originalName.Contains("-"))
                         {
-                            char lastChar = sheetName[sheetName.Length - 1];
-                            // check if the last character is a digit
-                            if (Char.IsDigit(lastChar))
-                            {
-                                // check if sheet name ends with '-#g'
-                                if (sheetName.EndsWith("-" + lastChar + "g"))
+                            string sheetName = originalName.Split('-')[0];                            
+
+                           // check to see if the original name ends with "g"
+                                if (originalName.EndsWith("g"))
                                 {
-                                    sheetName = sheetName.Substring(0, sheetName.Length - 2) + "g";
+                                    newName = sheetName + "-g";
                                 }
                                 else
                                 {
-                                    sheetName = sheetName.Substring(0, sheetName.Length - 2);
+                                    newName = sheetName;
                                 }
+
                                 // set the new sheet name
-                                curSheet.Name = sheetName;
-                            }
-                        }
+                                curSheet.Name = newName;
+                        }                       
                     }
                 }
 
