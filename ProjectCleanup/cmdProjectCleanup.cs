@@ -470,17 +470,17 @@ namespace ProjectCleanup
                             string sheetName = originalName.Split('-')[0];                            
 
                            // check to see if the original name ends with "g"
-                                if (originalName.EndsWith("g"))
-                                {
-                                    newName = sheetName + "-g";
-                                }
-                                else
-                                {
-                                    newName = sheetName;
-                                }
+                           if (originalName.EndsWith("g"))
+                            {
+                                newName = sheetName + "-g";
+                            }
+                           else
+                            {
+                                newName = sheetName;
+                            }
 
-                                // set the new sheet name
-                                curSheet.Name = newName;
+                           // set the new sheet name
+                           curSheet.Name = newName;
                         }                       
                     }
                 }
