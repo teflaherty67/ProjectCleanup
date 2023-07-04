@@ -21,11 +21,11 @@ namespace ProjectCleanup
 
         #region Families
 
-        public static List<Family> GetAllFamilies(Document doc)
+        public static List<Family> GetAllFamilies(Document curDoc)
         {
             List<Family> m_returnList = new List<Family>();
 
-            FilteredElementCollector collector = new FilteredElementCollector(doc);
+            FilteredElementCollector collector = new FilteredElementCollector(curDoc);
             collector.OfClass(typeof(Family));
 
             foreach (Family family in collector)
@@ -36,9 +36,9 @@ namespace ProjectCleanup
             return m_returnList;
         }
 
-        public static List<Family> GetFamilyByNameContains(Document doc, string familyName)
+        public static List<Family> GetFamilyByNameContains(Document curDoc, string familyName)
         {
-            List<Family> m_famList = GetAllFamilies(doc);
+            List<Family> m_famList = GetAllFamilies(curDoc);
 
             List<Family> m_returnList = new List<Family>();
 
@@ -54,9 +54,9 @@ namespace ProjectCleanup
             return m_returnList;
         }
 
-        public static Family GetFamilyByName(Document doc, string familyName)
+        public static Family GetFamilyByName(Document curDoc, string familyName)
         {
-            List<Family> famList = GetAllFamilies(doc);
+            List<Family> famList = GetAllFamilies(curDoc);
 
             foreach (Family curFam in famList)
             {
@@ -135,7 +135,7 @@ namespace ProjectCleanup
         {
             if (curDoc.IsFamilyDocument)
             {
-                TaskDialog.Show("Error", "Cannot be a family document.");
+                TaskDialog.Show("Error", "Cannot be a family curDocument.");
                 return null;
             }
 
@@ -315,11 +315,11 @@ namespace ProjectCleanup
 
         #region Schedules
 
-        internal static List<ViewSchedule> GetAllSchedules(Document doc)
+        internal static List<ViewSchedule> GetAllSchedules(Document curDoc)
         {
             List<ViewSchedule> m_schedList = new List<ViewSchedule>();
 
-            FilteredElementCollector curCollector = new FilteredElementCollector(doc);
+            FilteredElementCollector curCollector = new FilteredElementCollector(curDoc);
             curCollector.OfClass(typeof(ViewSchedule));
             curCollector.WhereElementIsNotElementType();
 
@@ -341,9 +341,9 @@ namespace ProjectCleanup
             return m_schedList;
         }
 
-        internal static List<ViewSchedule> GetScheduleByNameContains(Document doc, string scheduleString)
+        internal static List<ViewSchedule> GetScheduleByNameContains(Document curDoc, string scheduleString)
         {
-            List<ViewSchedule> m_scheduleList = GetAllSchedules(doc);
+            List<ViewSchedule> m_scheduleList = GetAllSchedules(curDoc);
 
             List<ViewSchedule> m_returnList = new List<ViewSchedule>();
 
@@ -356,9 +356,9 @@ namespace ProjectCleanup
             return m_returnList;
         }
 
-        internal static List<string> GetAllSSINames(Document doc)
+        internal static List<string> GetAllSSINames(Document curDoc)
         {
-            FilteredElementCollector m_colSSI = new FilteredElementCollector(doc);
+            FilteredElementCollector m_colSSI = new FilteredElementCollector(curDoc);
             m_colSSI.OfClass(typeof(ScheduleSheetInstance));
 
             List<string> m_returnList = new List<string>();
@@ -372,9 +372,9 @@ namespace ProjectCleanup
             return m_returnList;
         }
 
-        internal static List<string> GetAllScheduleNames(Document doc)
+        internal static List<string> GetAllScheduleNames(Document curDoc)
         {
-            List<ViewSchedule> m_schedList = GetAllSchedules(doc);
+            List<ViewSchedule> m_schedList = GetAllSchedules(curDoc);
 
             List<string> m_Names = new List<string>();
 
@@ -395,7 +395,7 @@ namespace ProjectCleanup
             return m_returnList.ToList();
         }
 
-        internal static List<ViewSchedule> GetSchedulesToDelete(Document doc, List<string> schedNotUsed)
+        internal static List<ViewSchedule> GetSchedulesToDelete(Document curDoc, List<string> schedNotUsed)
         {
             List<ViewSchedule> m_returnList = new List<ViewSchedule>();
 
@@ -403,7 +403,7 @@ namespace ProjectCleanup
             {
                 string curName = schedName;
 
-                ViewSchedule curSched = GetViewScheduleByName(doc, curName);
+                ViewSchedule curSched = GetViewScheduleByName(curDoc, curName);
 
                 if (curSched != null)
                 {
@@ -414,9 +414,9 @@ namespace ProjectCleanup
             return m_returnList;
         }
 
-        internal static ViewSchedule GetViewScheduleByName(Document doc, string viewScheduleName)
+        internal static ViewSchedule GetViewScheduleByName(Document curDoc, string viewScheduleName)
         {
-            List<ViewSchedule> m_SchedList = GetAllSchedules(doc);
+            List<ViewSchedule> m_SchedList = GetAllSchedules(curDoc);
 
             ViewSchedule m_viewSchedNotFound = null;
 
@@ -435,10 +435,10 @@ namespace ProjectCleanup
 
         #region Sheets
 
-        internal static List<ViewSheet> GetAllSheets(Document doc)
+        internal static List<ViewSheet> GetAllSheets(Document curDoc)
         {
             //get all sheets
-            FilteredElementCollector m_colViews = new FilteredElementCollector(doc);
+            FilteredElementCollector m_colViews = new FilteredElementCollector(curDoc);
             m_colViews.OfCategory(BuiltInCategory.OST_Sheets);
 
             List<ViewSheet> m_sheets = new List<ViewSheet>();
@@ -450,12 +450,12 @@ namespace ProjectCleanup
             return m_sheets;
         }
                 
-        internal static List<string> GetAllSheetGroupsByCategory(Document doc, string categoryValue)
+        internal static List<string> GetAllSheetGroupsByCategory(Document curDoc, string categoryValue)
         {
             List<string> m_groups = new List<string>();
 
             // Get all sheet views in the project that have the specified category value
-            List<ViewSheet> m_sheets = GetAllSheetsByCategory(doc, categoryValue);
+            List<ViewSheet> m_sheets = GetAllSheetsByCategory(curDoc, categoryValue);
 
             // Iterate through each sheet view and get the value of the "Group" parameter
             foreach (ViewSheet sheet in m_sheets)
@@ -479,9 +479,9 @@ namespace ProjectCleanup
             return m_groups;
         }
 
-        internal static List<ViewSheet> GetSheetsByGroupName(Document doc, string stringValue)
+        internal static List<ViewSheet> GetSheetsByGroupName(Document curDoc, string stringValue)
         {
-            List<ViewSheet> m_viewSheets = GetAllSheets(doc);
+            List<ViewSheet> m_viewSheets = GetAllSheets(curDoc);
 
             List<ViewSheet> m_returnGroups = new List<ViewSheet>();
 
@@ -498,12 +498,12 @@ namespace ProjectCleanup
             return m_returnGroups;
         }
 
-        public static List<ViewSheet> GetAllSheetsByCategory(Document doc, string categoryValue)
+        public static List<ViewSheet> GetAllSheetsByCategory(Document curDoc, string categoryValue)
         {
             List<ViewSheet> m_sheets = new List<ViewSheet>();
 
             // Get all sheets in the project
-            FilteredElementCollector sheetCollector = new FilteredElementCollector(doc);
+            FilteredElementCollector sheetCollector = new FilteredElementCollector(curDoc);
             ICollection<Element> sheetElements = sheetCollector.OfClass(typeof(ViewSheet)).ToElements();
 
             // Iterate through each sheet and check if it has the specified category parameter with the value of "Inactive"
@@ -547,10 +547,10 @@ namespace ProjectCleanup
 
         #region Views
 
-        internal static List<View> GetAllViews(Document doc)
+        internal static List<View> GetAllViews(Document curDoc)
         {
             {
-                FilteredElementCollector m_colviews = new FilteredElementCollector(doc);
+                FilteredElementCollector m_colviews = new FilteredElementCollector(curDoc);
                 m_colviews.OfCategory(BuiltInCategory.OST_Views);                
 
                 List<View> m_views = new List<View>();
@@ -565,9 +565,9 @@ namespace ProjectCleanup
             }
         }
 
-        internal static List<View> GetAllViewsByCategory(Document doc, string catName)
+        internal static List<View> GetAllViewsByCategory(Document curDoc, string catName)
         {
-            List<View> m_colViews = GetAllViews(doc);
+            List<View> m_colViews = GetAllViews(curDoc);
 
             List<View> m_returnList = new List<View>();
 
@@ -582,9 +582,9 @@ namespace ProjectCleanup
             return m_returnList;
         }
 
-        internal static List<View> GetAllViewsByCategoryAndViewTemplate(Document doc, string catName, string vtName)
+        internal static List<View> GetAllViewsByCategoryAndViewTemplate(Document curDoc, string catName, string vtName)
         {
-            List<View> m_colViews = GetAllViewsByCategory(doc, catName);
+            List<View> m_colViews = GetAllViewsByCategory(curDoc, catName);
 
             List<View> m_returnList = new List<View>();
 
@@ -594,11 +594,28 @@ namespace ProjectCleanup
 
                 if (vtId != ElementId.InvalidElementId)
                 {
-                    View vt = doc.GetElement(vtId) as View;
+                    View vt = curDoc.GetElement(vtId) as View;
 
                     if (vt.Name == vtName)
                         m_returnList.Add(curView);
                 }
+            }
+
+            return m_returnList;
+        }
+
+        internal static List<View> GetAllViewsByCategoryContains(Document curDoc, string catName)
+        {
+            List<View> m_colViews = GetAllViewsByCategory(curDoc, catName);
+
+            List<View> m_returnList = new List<View>();
+
+            foreach (View curView in m_colViews)
+            {
+                string viewCat = GetParameterValueByName(curView, "Category");
+
+                if (viewCat.Contains(catName))
+                    m_returnList.Add(curView);
             }
 
             return m_returnList;
@@ -621,7 +638,6 @@ namespace ProjectCleanup
                 }
             }
             return null;
-        }
-
+        }        
     }
 }
