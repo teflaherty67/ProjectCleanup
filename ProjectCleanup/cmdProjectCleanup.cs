@@ -120,7 +120,7 @@ namespace ProjectCleanup
 
                 // get all the views in the project by category
                 List<View> listViews = new List<View>();
-                List<View> listCat00 = Utils.GetAllViewsByCategory(doc, "00:Form/Foundation Plans");
+                List<View> listCat00 = Utils.GetAllViewsByCategory(doc, "00:Foundation Plans");
                 List<View> listCat01 = Utils.GetAllViewsByCategory(doc, "01:Floor Plans");
                 List<View> listCat02 = Utils.GetAllViewsByCategory(doc, "02:Elevations");
                 List<View> listCat03 = Utils.GetAllViewsByCategory(doc, "03:Roof Plans");

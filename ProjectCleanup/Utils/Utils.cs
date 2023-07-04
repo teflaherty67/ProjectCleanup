@@ -551,12 +551,14 @@ namespace ProjectCleanup
         {
             {
                 FilteredElementCollector m_colviews = new FilteredElementCollector(doc);
-                m_colviews.OfCategory(BuiltInCategory.OST_Views);
+                m_colviews.OfCategory(BuiltInCategory.OST_Views);                
 
                 List<View> m_views = new List<View>();
                 foreach (View x in m_colviews.ToElements())
                 {
-                    m_views.Add(x);
+                    if(x.IsTemplate == false)
+
+                        m_views.Add(x);
                 }
 
                 return m_views;
