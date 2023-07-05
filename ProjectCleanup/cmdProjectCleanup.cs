@@ -25,14 +25,12 @@ namespace ProjectCleanup
           ElementSet elements)
         {
             UIApplication uiapp = commandData.Application;
-            UIDocument uicurDoc = uiapp.ActiveUIDocument;
+            UIDocument uidoc = uiapp.ActiveUIDocument;
             Application app = uiapp.Application;
-            Document curDoc = uicurDoc.Document;
-
-            // put any code needed for the form here
-
+            Document doc = uidoc.Document;
+                        
             // get sheet groups in Inactive category
-            List<string> uniqueGroups = Utils.GetAllSheetGroupsByCategory(curDoc, "Inactive");
+            List<string> uniqueGroups = Utils.GetAllSheetGroupsByCategory(doc, "Inactive");
 
             // open form
             frmProjectCleanup curForm = new frmProjectCleanup(uniqueGroups)
@@ -73,20 +71,18 @@ namespace ProjectCleanup
             else if (txtClient == "West Virginia")
                 nameClient = "LGI-WV";
 
-            ProjectInfo clientInfo = curDoc.ProjectInformation;
+            ProjectInfo clientInfo = doc.ProjectInformation;
 
-            using (Transaction t = new Transaction(curDoc))
+            using (Transaction t = new Transaction(doc))
             {
                 t.Start("Project Cleanup");
 
-                #region Client Name
+                //SET VALUE OF CLIENT NAME
 
                 if (null != clientInfo)
                 {
                     clientInfo.ClientName = nameClient;
                 }
-
-                #endregion
 
                 #region Delete Sheet Groups
 
@@ -101,11 +97,11 @@ namespace ProjectCleanup
                         {
                             string stringValue = checkBox.Content.ToString();
 
-                            List<ViewSheet> viewSheets = Utils.GetSheetsByGroupName(curDoc, stringValue);
+                            List<ViewSheet> viewSheets = Utils.GetSheetsByGroupName(doc, stringValue);
 
                             foreach (ViewSheet curSheet in viewSheets)
                             {
-                                curDoc.Delete(curSheet.Id);
+                                doc.Delete(curSheet.Id);
                             }
                         }
                     }
@@ -120,17 +116,17 @@ namespace ProjectCleanup
 
                 // get all the views in the project by category
                 List<View> listViews = new List<View>();
-                List<View> listCat01 = Utils.GetAllViewsByCategory(curDoc, "01:Floor Plans");
-                List<View> listCat02 = Utils.GetAllViewsByCategory(curDoc, "02:Elevations");
-                List<View> listCat03 = Utils.GetAllViewsByCategory(curDoc, "03:Roof Plans");
-                List<View> listCat04 = Utils.GetAllViewsByCategory(curDoc, "04:Sections");
-                List<View> listCat05 = Utils.GetAllViewsByCategory(curDoc, "05:Interior Elevations");
-                List<View> listCat06 = Utils.GetAllViewsByCategory(curDoc, "06:Electrical Plans");
-                List<View> listCat07 = Utils.GetAllViewsByCategoryContains(curDoc, "Foundation Plans");
-                List<View> listCat08 = Utils.GetAllViewsByCategoryContains(curDoc, "Ceiling Framing Plans");
-                List<View> listCat09 = Utils.GetAllViewsByCategoryContains(curDoc, "Roof Framing Plans");
-                List<View> listCat13 = Utils.GetAllViewsByCategoryAndViewTemplate(curDoc, "13:Presentation Views", "13-Elevation Presentation");
-                List<View> listCat14 = Utils.GetAllViewsByCategoryAndViewTemplate(curDoc, "14:Ceiling Views", "14-Soffit");
+                List<View> listCat01 = Utils.GetAllViewsByCategory(doc, "01:Floor Plans");
+                List<View> listCat02 = Utils.GetAllViewsByCategory(doc, "02:Elevations");
+                List<View> listCat03 = Utils.GetAllViewsByCategory(doc, "03:Roof Plans");
+                List<View> listCat04 = Utils.GetAllViewsByCategory(doc, "04:Sections");
+                List<View> listCat05 = Utils.GetAllViewsByCategory(doc, "05:Interior Elevations");
+                List<View> listCat06 = Utils.GetAllViewsByCategory(doc, "06:Electrical Plans");
+                List<View> listCat07 = Utils.GetAllViewsByCategory(doc, "07:Form/Foundation Plans");
+                List<View> listCat08 = Utils.GetAllViewsByCategory(doc, "08:Ceiling Framing Plans");
+                List<View> listCat09 = Utils.GetAllViewsByCategory(doc, "09:Roof Framing Plans");
+                List<View> listCat13 = Utils.GetAllViewsByCategoryAndViewTemplate(doc, "13:Presentation Views", "13-Elevation Presentation");
+                List<View> listCat14 = Utils.GetAllViewsByCategoryAndViewTemplate(doc, "14:Ceiling Views", "14-Soffit");
 
                 // combine the lists together
                 listViews.AddRange(listCat01);
@@ -145,39 +141,42 @@ namespace ProjectCleanup
                 listViews.AddRange(listCat13);
                 listViews.AddRange(listCat14);
 
+                int counter = 2;
+
+                while (counter > 0)
+
+                {
+
+                    counter--;
+                }
+
+
                 // get all the sheets in the project
-                FilteredElementCollector sheetColl = new FilteredElementCollector(curDoc);
+                FilteredElementCollector sheetColl = new FilteredElementCollector(doc);
                 sheetColl.OfClass(typeof(ViewSheet));
 
                 if (curForm.GetCheckBoxViews() == true )
                 {
-                    // loop through the views twice
-                    int counter = 2;
-
-                    while (counter > 0)
+                    // loop through views
+                    foreach (View curView in listViews)
                     {
-                        // loop through views
-                        foreach (View curView in listViews)
+                        // check if view is already on sheet
+                        if (Viewport.CanAddViewToSheet(doc, sheetColl.FirstElementId(), curView.Id))
                         {
-                            // check if view is already on sheet
-                            if (Viewport.CanAddViewToSheet(curDoc, sheetColl.FirstElementId(), curView.Id))
+                            // check if view has dependent views
+                            if (curView.GetDependentViewIds().Count() == 0)
                             {
-                                // check if view has dependent views
-                                if (curView.GetDependentViewIds().Count() == 0)
-                                {
-                                    // add view to list of views to be deleted
-                                    viewsToDelete.Add(curView);
-                                }
+                                // add view to list of views to be deleted
+                                viewsToDelete.Add(curView);
                             }
-                        }
 
-                        foreach (View deleteView in viewsToDelete)
-                        {
-                            // delete the view
-                            curDoc.Delete(deleteView.Id);
                         }
+                    }
 
-                        counter = counter - 1;
+                    foreach (View deleteView in viewsToDelete)
+                    {
+                        // delete the view
+                        doc.Delete(deleteView.Id);
                     }
                 }
 
@@ -186,22 +185,22 @@ namespace ProjectCleanup
                 #region Delete Unused Schedules
 
                 // create a list of all schedules by name
-                List<string> schedNames = Utils.GetAllScheduleNames(curDoc);
+                List<string> schedNames = Utils.GetAllScheduleNames(doc);
 
                 // create a list of the names of all sheet schedule instances
-                List<string> schedInstances = Utils.GetAllSSINames(curDoc);
+                List<string> schedInstances = Utils.GetAllSSINames(doc);
 
                 // compare the 2 lists and create a list of schedules not used by name
                 List<string> schedNotUsed = Utils.GetSchedulesNotUsed(schedNames, schedInstances);
 
                 // convert the list of schedule names to a list of View Schedules
-                List<ViewSchedule> SchedulesToDelete = Utils.GetSchedulesToDelete(curDoc, schedNotUsed);
+                List<ViewSchedule> SchedulesToDelete = Utils.GetSchedulesToDelete(doc, schedNotUsed);
                 
                 if (curForm.GetCheckBoxSchedules() == true)
                 {
                     foreach (ViewSchedule curSched in SchedulesToDelete)
                     {
-                        curDoc.Delete(curSched.Id);
+                        doc.Delete(curSched.Id);
                     }
                 }
 
@@ -210,12 +209,12 @@ namespace ProjectCleanup
                 #region Rename Schedules
 
                 // create lists for schedules by name contains
-                List<ViewSchedule> veneerList = Utils.GetScheduleByNameContains(curDoc, "Exterior Veneer Calculations");
-                List<ViewSchedule> floorList = Utils.GetScheduleByNameContains(curDoc, "Floor Areas");
-                List<ViewSchedule> frameList = Utils.GetScheduleByNameContains(curDoc, "Frame Areas");
-                List<ViewSchedule> atticList = Utils.GetScheduleByNameContains(curDoc, "Roof Ventilation Calculations");
-                List<ViewSchedule> equipmentList = Utils.GetScheduleByNameContains(curDoc, "Roof Ventilation Equipment");
-                List<ViewSchedule> indexList = Utils.GetScheduleByNameContains(curDoc, "Sheet Index");
+                List<ViewSchedule> veneerList = Utils.GetScheduleByNameContains(doc, "Exterior Veneer Calculations");
+                List<ViewSchedule> floorList = Utils.GetScheduleByNameContains(doc, "Floor Areas");
+                List<ViewSchedule> frameList = Utils.GetScheduleByNameContains(doc, "Frame Areas");
+                List<ViewSchedule> atticList = Utils.GetScheduleByNameContains(doc, "Roof Ventilation Calculations");
+                List<ViewSchedule> equipmentList = Utils.GetScheduleByNameContains(doc, "Roof Ventilation Equipment");
+                List<ViewSchedule> indexList = Utils.GetScheduleByNameContains(doc, "Sheet Index");
 
                 // create a counter for the schedules that will be renamed
                 int countRenamed = 0;
@@ -435,7 +434,7 @@ namespace ProjectCleanup
                 #region Delete Code Bracing Parameter
 
                 string paramName = "Code Bracing";
-                IEnumerable<ParameterElement> _params = new FilteredElementCollector(curDoc)
+                IEnumerable<ParameterElement> _params = new FilteredElementCollector(doc)
                         .WhereElementIsNotElementType()
                         .OfClass(typeof(ParameterElement))
                         .Cast<ParameterElement>();
@@ -453,7 +452,7 @@ namespace ProjectCleanup
 
                 if (curForm.GetCheckBoxCode() == true)
                 {
-                    curDoc.Delete(projectParam.Id);
+                    doc.Delete(projectParam.Id);
                 }
 
                 #endregion
@@ -461,33 +460,33 @@ namespace ProjectCleanup
                 #region Remove Code Filter From Sheet Name
 
                 // get all the sheets
-                List<ViewSheet> activeSheets = Utils.GetAllSheets(curDoc);
+                List<ViewSheet> activeSheets = Utils.GetAllSheets(doc);
 
                 if (curForm.GetCheckBoxSheets() == true)
                 {
                     foreach (ViewSheet curSheet in activeSheets)
                     {
-                        string originalName = curSheet.Name;                        
-                        string newName = "";
-
-                        // check the last character of the original name
-                        if (originalName.Length > 0 && originalName.Contains("-"))
+                        string sheetName = curSheet.Name;
+                        // check if sheet name ends with '-#'
+                        if (sheetName.Length > 2 && sheetName[sheetName.Length - 2] == '-')
                         {
-                            string sheetName = originalName.Split('-')[0];                            
-
-                           // check to see if the original name ends with "g"
-                           if (originalName.EndsWith("g"))
+                            char lastChar = sheetName[sheetName.Length - 1];
+                            // check if the last character is a digit
+                            if (Char.IsDigit(lastChar))
                             {
-                                newName = sheetName + "-g";
+                                // check if sheet name ends with '-#g'
+                                if (sheetName.EndsWith("-" + lastChar + "g"))
+                                {
+                                    sheetName = sheetName.Substring(0, sheetName.Length - 2) + "g";
+                                }
+                                else
+                                {
+                                    sheetName = sheetName.Substring(0, sheetName.Length - 2);
+                                }
+                                // set the new sheet name
+                                curSheet.Name = sheetName;
                             }
-                           else
-                            {
-                                newName = sheetName;
-                            }
-
-                           // set the new sheet name
-                           curSheet.Name = newName;
-                        }                       
+                        }
                     }
                 }
 
@@ -507,16 +506,16 @@ namespace ProjectCleanup
 
                 if (curForm.GetCheckBoxRoomTag() == true)
                 {
-                    if (Utils.DoesProjectParamExist(curDoc, paramClgName))
+                    if (Utils.DoesProjectParamExist(doc, paramClgName))
                     {
                         return Result.Cancelled;
                     }
                     else
                     {
-                        Utils.CreateSharedParam(curDoc, "Rooms", paramClgName, BuiltInCategory.OST_Rooms);
+                        Utils.CreateSharedParam(doc, "Rooms", paramClgName, BuiltInCategory.OST_Rooms);
                     }
 
-                    curDoc.LoadFamily(tagPath, famRoomTagLoadOptions, out family);
+                    doc.LoadFamily(tagPath, famRoomTagLoadOptions, out family);
                 }
 
                 #endregion
@@ -547,7 +546,7 @@ namespace ProjectCleanup
 
                         //load the family
 
-                        curDoc.LoadFamily(famPath, familyLoadOptions, out family);
+                        doc.LoadFamily(famPath, familyLoadOptions, out family);
                     }
 
                     foreach (string curFamString in famListKitchen)
@@ -556,7 +555,7 @@ namespace ProjectCleanup
 
                         // load the family
 
-                        curDoc.LoadFamily(famPath, familyLoadOptions, out family);
+                        doc.LoadFamily(famPath, familyLoadOptions, out family);
                     }
 
                     foreach (string curFamString in famListLighting)
@@ -565,7 +564,7 @@ namespace ProjectCleanup
 
                         // load the family
 
-                        curDoc.LoadFamily(famPath, familyLoadOptions, out family);
+                        doc.LoadFamily(famPath, familyLoadOptions, out family);
                     }
 
                     foreach (string curFamString in famListShelving)
@@ -574,7 +573,7 @@ namespace ProjectCleanup
 
                         // load the family
 
-                        curDoc.LoadFamily(famPath, familyLoadOptions, out family);
+                        doc.LoadFamily(famPath, familyLoadOptions, out family);
                     }
                 }
 
@@ -583,10 +582,10 @@ namespace ProjectCleanup
                 #region Update Line Styles
 
                 // get the line style called <Centerline>
-                GraphicsStyle curCenterline = Utils.GetLinestyleByName(curDoc, "<Centerline>");
+                GraphicsStyle curCenterline = Utils.GetLinestyleByName(doc, "<Centerline>");
 
                 // get the line pattern called: Center 1/8"
-                LinePatternElement newCenterLP = Utils.GetLinePatternByName(curDoc, "Center 1/8\"");
+                LinePatternElement newCenterLP = Utils.GetLinePatternByName(doc, "Center 1/8\"");
 
                 if (curForm.GetCheckBoxLinestyles() == true)
                 {
@@ -602,15 +601,15 @@ namespace ProjectCleanup
 
                 // create variables to hold family names
 
-                Family elWall = Utils.GetFamilyByName(curDoc, "EL-Wall Base");
-                Family elNoBase = Utils.GetFamilyByName(curDoc, "EL-No Base");
-                Family ltNoBase = Utils.GetFamilyByName(curDoc, "LT-No Base");
+                Family elWall = Utils.GetFamilyByName(doc, "EL-Wall Base");
+                Family elNoBase = Utils.GetFamilyByName(doc, "EL-No Base");
+                Family ltNoBase = Utils.GetFamilyByName(doc, "LT-No Base");
 
                 // create lists to hold families
 
-                List<Family> listEL_Wall = Utils.GetFamilyByNameContains(curDoc, "EL-Wall Base");
-                List<Family> listEL_NoBase = Utils.GetFamilyByNameContains(curDoc, "EL-No Base");
-                List<Family> listLT_NoBase = Utils.GetFamilyByNameContains(curDoc, "LT-No Base");
+                List<Family> listEL_Wall = Utils.GetFamilyByNameContains(doc, "EL-Wall Base");
+                List<Family> listEL_NoBase = Utils.GetFamilyByNameContains(doc, "EL-No Base");
+                List<Family> listLT_NoBase = Utils.GetFamilyByNameContains(doc, "LT-No Base");
 
                 if (curForm.GetCheckBoxElectrical() == true)
                 {
